@@ -1,0 +1,893 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Direct Farm Market - REGISTRATION</title>
+    <style>
+        /* Reset and base styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-gradient: linear-gradient(135deg, #4CAF50 0%, #45a049 100%);
+            --secondary-gradient: linear-gradient(135deg, #FF9800 0%, #FF5722 100%);
+            --success-gradient: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            --warning-gradient: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+            --glass-gradient: linear-gradient(135deg, rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.95));
+            --farm-gradient: linear-gradient(45deg, #4CAF50, #8BC34A, #CDDC39, #FFEB3B, #FFC107, #FF9800);
+            --farm-green: #4CAF50;
+            --farm-orange: #FF9800;
+            --farm-yellow: #FFC107;
+            --farm-blue: #2196F3;
+            --farm-purple: #9C27B0;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: var(--farm-gradient);
+            background-size: 400% 400%;
+            animation: gradientShift 15s ease infinite;
+            color: #2c3e50;
+            line-height: 1.6;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow-y: auto
+        }
+
+        /* Animated background elements */
+        body::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                radial-gradient(circle at 20% 80%, rgba(76, 175, 80, 0.3) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(255, 152, 0, 0.3) 0%, transparent 50%),
+                radial-gradient(circle at 40% 40%, rgba(139, 195, 74, 0.2) 0%, transparent 50%);
+            animation: float 20s ease-in-out infinite;
+        }
+
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(180deg); }
+        }
+
+        /* Floating particles */
+        .particle {
+            position: absolute;
+            background: rgba(255, 255, 255, 0.5);
+            border-radius: 50%;
+            animation: floatParticle 15s infinite linear;
+        }
+
+        .particle:nth-child(1) { width: 80px; height: 80px; top: 10%; left: 10%; animation-delay: 0s; }
+        .particle:nth-child(2) { width: 120px; height: 120px; top: 60%; left: 80%; animation-delay: -2s; }
+        .particle:nth-child(3) { width: 60px; height: 60px; top: 80%; left: 20%; animation-delay: -4s; }
+        .particle:nth-child(4) { width: 100px; height: 100px; top: 20%; left: 70%; animation-delay: -6s; }
+
+        @keyframes floatParticle {
+            0%, 100% { transform: translate(0, 0) rotate(0deg); opacity: 0.7; }
+            25% { transform: translate(100px, 50px) rotate(90deg); opacity: 0.4; }
+            50% { transform: translate(50px, 100px) rotate(180deg); opacity: 0.7; }
+            75% { transform: translate(-50px, 50px) rotate(270deg); opacity: 0.4; }
+        }
+
+        .container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 1rem;
+            position: relative;
+            z-index: 2;
+        }
+
+        .login-form {
+            background: var(--glass-gradient);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.8);
+            padding: 3rem;
+            border-radius: 20px;
+            box-shadow: 
+                0 25px 50px rgba(0, 0, 0, 0.15),
+                0 0 0 1px rgba(255, 255, 255, 0.3),
+                inset 0 0 0 1px rgba(255, 255, 255, 0.2);
+            width: 100%;
+            max-width: 500px;
+            position: relative;
+            overflow-y: auto;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            transform: scale(0.95);
+            opacity: 0;
+            animation: popIn 0.8s ease forwards;
+        }
+
+        @keyframes popIn {
+            0% { transform: scale(0.95); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        .login-form:hover {
+            transform: translateY(-5px);
+            box-shadow: 
+                0 35px 60px rgba(0, 0, 0, 0.2),
+                0 0 0 1px rgba(255, 255, 255, 0.4),
+                inset 0 0 0 1px rgba(255, 255, 255, 0.3);
+        }
+
+        .login-form::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(76, 175, 80, 0.1), transparent);
+            transition: left 0.6s ease;
+        }
+
+        .login-form:hover::before {
+            left: 100%;
+        }
+
+        .logo {
+            text-align: center;
+            margin-bottom: 2.5rem;
+            position: relative;
+        }
+
+        .logo h1 {
+            background: var(--primary-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-size: 2.8rem;
+            margin-bottom: 0.8rem;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            animation: glow 2s ease-in-out infinite alternate;
+        }
+
+        @keyframes glow {
+            from { text-shadow: 0 0 20px rgba(76, 175, 80, 0.3); }
+            to { text-shadow: 0 0 30px rgba(76, 175, 80, 0.5), 0 0 40px rgba(76, 175, 80, 0.3); }
+        }
+
+        .logo p {
+            color: #5d6d7e;
+            font-size: 1.1rem;
+            font-weight: 500;
+            text-shadow: 0 1px 2px rgba(255, 255, 255, 0.8);
+        }
+
+        .login-form h2 {
+            text-align: center;
+            margin-bottom: 2rem;
+            color: #2c3e50;
+            font-size: 1.8rem;
+            font-weight: 700;
+            text-shadow: 0 1px 2px rgba(255, 255, 255, 0.8);
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+            position: relative;
+            transform: translateY(20px);
+            opacity: 0;
+            animation: slideUp 0.5s ease forwards;
+        }
+
+        @keyframes slideUp {
+            0% { transform: translateY(20px); opacity: 0; }
+            100% { transform: translateY(0); opacity: 1; }
+        }
+
+        .form-group:nth-child(1) { animation-delay: 0.2s; }
+        .form-group:nth-child(2) { animation-delay: 0.3s; }
+        .form-group:nth-child(3) { animation-delay: 0.4s; }
+        .form-group:nth-child(4) { animation-delay: 0.5s; }
+        .form-group:nth-child(5) { animation-delay: 0.6s; }
+        .form-group:nth-child(6) { animation-delay: 0.7s; }
+        .form-group:nth-child(7) { animation-delay: 0.8s; }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.8rem;
+            font-weight: 600;
+            color: #34495e;
+            font-size: 1rem;
+        }
+
+        .form-group input, .form-group select {
+            width: 100%;
+            padding: 1rem 1.2rem;
+            background: rgba(255, 255, 255, 0.9);
+            border: 2px solid #e3e8f0;
+            border-radius: 12px;
+            font-size: 1rem;
+            color: #2c3e50;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+
+        .form-group input::placeholder {
+            color: #a0aec0;
+            font-weight: 400;
+        }
+
+        .form-group input:focus, .form-group select:focus {
+            outline: none;
+            border-color: #4CAF50;
+            background: white;
+            box-shadow: 
+                0 0 20px rgba(76, 175, 80, 0.2),
+                inset 0 0 10px rgba(76, 175, 80, 0.05);
+            transform: scale(1.02);
+        }
+
+        /* Password strength indicator */
+        .password-strength {
+            height: 5px;
+            border-radius: 5px;
+            margin-top: 8px;
+            background: #e3e8f0;
+            overflow-y: auto;
+        }
+
+        .password-strength-bar {
+            height: 100%;
+            width: 0%;
+            transition: all 0.3s ease;
+            border-radius: 5px;
+        }
+
+        .strength-weak {
+            background: #f5576c;
+            width: 25%;
+        }
+
+        .strength-medium {
+            background: #f093fb;
+            width: 50%;
+        }
+
+        .strength-strong {
+            background: #4facfe;
+            width: 75%;
+        }
+
+        .strength-very-strong {
+            background: #43e97b;
+            width: 100%;
+        }
+
+        .password-strength-text {
+            font-size: 0.8rem;
+            margin-top: 5px;
+            text-align: right;
+            color: #5d6d7e;
+        }
+
+        .btn-primary {
+            width: 100%;
+            padding: 1.2rem;
+            background: var(--primary-gradient);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow-y: auto;
+            box-shadow: 0 10px 30px rgba(76, 175, 80, 0.4);
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+            transform: translateY(20px);
+            opacity: 0;
+            animation: slideUp 0.5s ease forwards;
+            animation-delay: 1s;
+        }
+
+        .btn-primary::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            transition: left 0.6s ease;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 
+                0 15px 40px rgba(76, 175, 80, 0.6),
+                0 0 20px rgba(76, 175, 80, 0.4);
+        }
+
+        .btn-primary:hover::before {
+            left: 100%;
+        }
+
+        .btn-primary:active {
+            transform: translateY(-1px);
+        }
+
+        .auth-links {
+            text-align: center;
+            margin-top: 2rem;
+            padding-top: 2rem;
+            border-top: 1px solid #e9ecef;
+            transform: translateY(20px);
+            opacity: 0;
+            animation: slideUp 0.5s ease forwards;
+            animation-delay: 1.2s;
+        }
+
+        .auth-links p {
+            color: #5d6d7e;
+            margin-bottom: 0.8rem;
+            font-weight: 500;
+        }
+
+        .auth-links a {
+            color: #4CAF50;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .auth-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--warning-gradient);
+            transition: width 0.3s ease;
+        }
+
+        .auth-links a:hover {
+            color: #45a049;
+        }
+
+        .auth-links a:hover::after {
+            width: 100%;
+        }
+
+        .security-note {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            font-size: 0.9rem;
+            color: #5d6d7e;
+            background: rgba(255, 255, 255, 0.8);
+            padding: 0.8rem;
+            border-radius: 8px;
+            margin-top: 1rem;
+            border: 1px solid #e9ecef;
+            font-weight: 500;
+        }
+
+        .message {
+            margin-top: 1.5rem;
+            padding: 1rem;
+            border-radius: 10px;
+            text-align: center;
+            display: none;
+            font-weight: 600;
+            border: 1px solid;
+        }
+
+        .message.success {
+            background: linear-gradient(135deg, rgba(67, 233, 123, 0.1), rgba(56, 249, 215, 0.1));
+            color: #27ae60;
+            border-color: #2ecc71;
+        }
+
+        .message.error {
+            background: linear-gradient(135deg, rgba(245, 87, 108, 0.1), rgba(240, 147, 251, 0.1));
+            color: #e74c3c;
+            border-color: #e74c3c;
+        }
+
+        /* Registration-specific styles */
+        .registration-steps {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 2rem;
+            position: relative;
+        }
+
+        .registration-steps::before {
+            content: '';
+            position: absolute;
+            top: 15px;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: #e3e8f0;
+            z-index: 1;
+        }
+
+        .step {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background: white;
+            border: 2px solid #e3e8f0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            color: #a0aec0;
+            position: relative;
+            z-index: 2;
+        }
+
+        .step.active {
+            background: var(--primary-gradient);
+            border-color: #4CAF50;
+            color: white;
+        }
+
+        .step.completed {
+            background: #43e97b;
+            border-color: #43e97b;
+            color: white;
+        }
+
+        /* Language Selector */
+        .language-selector {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            z-index: 3;
+            transform: translateY(-20px);
+            opacity: 0;
+            animation: slideDown 0.5s ease forwards;
+            animation-delay: 0.5s;
+        }
+
+        @keyframes slideDown {
+            0% { transform: translateY(-20px); opacity: 0; }
+            100% { transform: translateY(0); opacity: 1; }
+        }
+
+        .language-selector select {
+            background: rgba(255, 255, 255, 0.9);
+            border: 2px solid #4CAF50;
+            border-radius: 8px;
+            padding: 0.5rem;
+            color: #2c3e50;
+            font-weight: 500;
+        }
+
+        /* Voice Registration */
+        .voice-registration {
+            text-align: center;
+            margin-top: 1rem;
+            transform: translateY(20px);
+            opacity: 0;
+            animation: slideUp 0.5s ease forwards;
+            animation-delay: 1.4s;
+        }
+
+        .voice-btn {
+            background: var(--farm-blue);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 60px;
+            height: 60px;
+            font-size: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(33, 150, 243, 0.4);
+        }
+
+        .voice-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 8px 20px rgba(33, 150, 243, 0.6);
+        }
+
+        .voice-btn.listening {
+            animation: pulse 1.5s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .login-form {
+                padding: 2rem;
+                margin: 1rem;
+            }
+
+            .logo h1 {
+                font-size: 2.2rem;
+            }
+
+            .login-form h2 {
+                font-size: 1.5rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .login-form {
+                padding: 1.5rem;
+            }
+
+            .logo h1 {
+                font-size: 1.8rem;
+            }
+
+            .form-group input, .form-group select {
+                padding: 0.8rem 1rem;
+            }
+
+            .btn-primary {
+                padding: 1rem;
+            }
+        }
+
+        /* Loading animation for button */
+        .btn-primary.loading {
+            pointer-events: none;
+            opacity: 0.8;
+        }
+
+        .btn-primary.loading::after {
+            content: '';
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            top: 50%;
+            left: 50%;
+            margin: -10px 0 0 -10px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-top: 2px solid white;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <!-- Animated background particles -->
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    
+    <!-- Language Selector -->
+    <div class="language-selector">
+        <select id="languageSelect">
+            <option value="en">🌐 English</option>
+            <option value="ta">🌐 தமிழ்</option>
+        </select>
+    </div>
+    
+    <div class="container">
+        <div class="login-form">
+            <div class="logo">
+                <h1>🌱 DIRECT FARM MARKET</h1>
+                <p>Join Our Agricultural Community</p>
+            </div>
+            
+            <!-- Registration progress indicator -->
+            <div class="registration-steps">
+                <div class="step completed">✓</div>
+                <div class="step active">2</div>
+                <div class="step">3</div>
+            </div>
+            
+            <form id="registerForm">
+                <h2>User Registration</h2>
+                
+                <div class="form-group">
+                    <label for="fullName">Full Name:</label>
+                    <input type="text" id="fullName" name="fullName" required placeholder="Enter your full name">
+                </div>
+                
+                <div class="form-group">
+                    <label for="userType">I am a:</label>
+                    <select id="userType" name="userType" required>
+                        <option value="">Select User Type</option>
+                        <option value="farmer">🌾 Farmer/Producer</option>
+                        <option value="consumer">🛒 Consumer/Buyer</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="phone">Phone Number:</label>
+                    <input type="tel" id="phone" name="phone" required placeholder="Enter your phone number">
+                </div>
+                
+                <div class="form-group">
+                    <label for="address">Address:</label>
+                    <input type="text" id="address" name="address" required placeholder="Enter your complete address">
+                </div>
+                
+                <div class="form-group">
+                    <label for="username">Username:</label>
+                    <input type="text" id="username" name="username" required placeholder="Choose a username">
+                </div>
+                
+                <div class="form-group">
+                    <label for="password">Password:</label>
+                    <input type="password" id="password" name="password" required placeholder="Create a strong password">
+                    <div class="password-strength">
+                        <div class="password-strength-bar" id="passwordStrengthBar"></div>
+                    </div>
+                    <div class="password-strength-text" id="passwordStrengthText">Password strength</div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="confirmPassword">Confirm Password:</label>
+                    <input type="password" id="confirmPassword" name="confirmPassword" required placeholder="Confirm your password">
+                </div>
+                
+                <button type="submit" class="btn-primary">Create Account</button>
+                
+                <div class="voice-registration">
+                    <button type="button" class="voice-btn" id="voiceRegisterBtn" title="Voice Registration">
+                        <i class="fas fa-microphone"></i>
+                    </button>
+                    <p style="margin-top: 10px; font-size: 14px; color: #5d6d7e;">Voice Registration</p>
+                </div>
+                
+                <div class="auth-links">
+                    <p>Already have an account? <a href="index.html">Login here</a></p>
+                    <p class="security-note">🔐 All transactions secured with transparent pricing</p>
+                </div>
+            </form>
+            
+            <div id="message" class="message"></div>
+        </div>
+    </div>
+    
+    <script>
+        // Enhanced form handling with animations
+        document.addEventListener('DOMContentLoaded', function() {
+            const registerForm = document.getElementById('registerForm');
+            const submitBtn = registerForm.querySelector('.btn-primary');
+            const passwordInput = document.getElementById('password');
+            const passwordStrengthBar = document.getElementById('passwordStrengthBar');
+            const passwordStrengthText = document.getElementById('passwordStrengthText');
+            const confirmPasswordInput = document.getElementById('confirmPassword');
+            const languageSelect = document.getElementById('languageSelect');
+            const voiceRegisterBtn = document.getElementById('voiceRegisterBtn');
+            
+            // Language translation data
+            const translations = {
+                en: {
+                    title: "🌱 DIRECT FARM MARKET",
+                    subtitle: "Join Our Agricultural Community",
+                    registration: "User Registration",
+                    fullName: "Full Name:",
+                    fullNamePlaceholder: "Enter your full name",
+                    userType: "I am a:",
+                    userTypePlaceholder: "Select User Type",
+                    farmer: "🌾 Farmer/Producer",
+                    consumer: "🛒 Consumer/Buyer",
+                    phone: "Phone Number:",
+                    phonePlaceholder: "Enter your phone number",
+                    address: "Address:",
+                    addressPlaceholder: "Enter your complete address",
+                    username: "Username:",
+                    usernamePlaceholder: "Choose a username",
+                    password: "Password:",
+                    passwordPlaceholder: "Create a strong password",
+                    confirmPassword: "Confirm Password:",
+                    confirmPasswordPlaceholder: "Confirm your password",
+                    createAccount: "Create Account",
+                    loginPrompt: "Already have an account?",
+                    loginLink: "Login here",
+                    securityNote: "🔐 All transactions secured with transparent pricing"
+                },
+                ta: {
+                    title: "🌱 நேரடி பண்ணை சந்தை",
+                    subtitle: "எங்கள் விவசாய சமூகத்தில் சேரவும்",
+                    registration: "பயனர் பதிவு",
+                    fullName: "முழு பெயர்:",
+                    fullNamePlaceholder: "உங்கள் முழு பெயரை உள்ளிடவும்",
+                    userType: "நான் ஒரு:",
+                    userTypePlaceholder: "பயனர் வகையைத் தேர்ந்தெடுக்கவும்",
+                    farmer: "🌾 விவசாயி/உற்பத்தியாளர்",
+                    consumer: "🛒 நுகர்வோர்/வாங்குபவர்",
+                    phone: "தொலைபேசி எண்:",
+                    phonePlaceholder: "உங்கள் தொலைபேசி எண்ணை உள்ளிடவும்",
+                    address: "முகவரி:",
+                    addressPlaceholder: "உங்கள் முழு முகவரியை உள்ளிடவும்",
+                    username: "பயனர்பெயர்:",
+                    usernamePlaceholder: "ஒரு பயனர்பெயரைத் தேர்ந்தெடுக்கவும்",
+                    password: "கடவுச்சொல்:",
+                    passwordPlaceholder: "வலுவான கடவுச்சொல்லை உருவாக்கவும்",
+                    confirmPassword: "கடவுச்சொல்லை உறுதிப்படுத்தவும்:",
+                    confirmPasswordPlaceholder: "உங்கள் கடவுச்சொல்லை உறுதிப்படுத்தவும்",
+                    createAccount: "கணக்கை உருவாக்கு",
+                    loginPrompt: "ஏற்கனவே ஒரு கணக்கு உள்ளதா?",
+                    loginLink: "இங்கே உள்நுழைக",
+                    securityNote: "🔐 அனைத்து பரிவர்த்தனைகளும் விலை விவரத்துடன் பாதுகாக்கப்படுகின்றன"
+                }
+            };
+
+            // Language change handler
+            languageSelect.addEventListener('change', function() {
+                const lang = this.value;
+                const t = translations[lang] || translations.en;
+                
+                document.querySelector('.logo h1').textContent = t.title;
+                document.querySelector('.logo p').textContent = t.subtitle;
+                document.querySelector('.login-form h2').textContent = t.registration;
+                document.querySelector('label[for="fullName"]').textContent = t.fullName;
+                document.getElementById('fullName').placeholder = t.fullNamePlaceholder;
+                document.querySelector('label[for="userType"]').textContent = t.userType;
+                document.querySelector('#userType option[value=""]').textContent = t.userTypePlaceholder;
+                document.querySelector('#userType option[value="farmer"]').textContent = t.farmer;
+                document.querySelector('#userType option[value="consumer"]').textContent = t.consumer;
+                document.querySelector('label[for="phone"]').textContent = t.phone;
+                document.getElementById('phone').placeholder = t.phonePlaceholder;
+                document.querySelector('label[for="address"]').textContent = t.address;
+                document.getElementById('address').placeholder = t.addressPlaceholder;
+                document.querySelector('label[for="username"]').textContent = t.username;
+                document.getElementById('username').placeholder = t.usernamePlaceholder;
+                document.querySelector('label[for="password"]').textContent = t.password;
+                document.getElementById('password').placeholder = t.passwordPlaceholder;
+                document.querySelector('label[for="confirmPassword"]').textContent = t.confirmPassword;
+                document.getElementById('confirmPassword').placeholder = t.confirmPasswordPlaceholder;
+                document.querySelector('.btn-primary').textContent = t.createAccount;
+                document.querySelector('.auth-links p').innerHTML = `${t.loginPrompt} <a href="index.html">${t.loginLink}</a>`;
+                document.querySelector('.security-note').textContent = t.securityNote;
+            });
+
+            // Voice registration
+            voiceRegisterBtn.addEventListener('click', function() {
+                const voiceBtn = this;
+                voiceBtn.classList.add('listening');
+                
+                // Simulate voice recognition
+                setTimeout(() => {
+                    voiceBtn.classList.remove('listening');
+                    
+                    // For demo purposes, auto-fill the form
+                    document.getElementById('fullName').value = 'Raj Kumar';
+                    document.getElementById('userType').value = 'farmer';
+                    document.getElementById('phone').value = '9876543210';
+                    document.getElementById('address').value = '123 Farm Street, Chennai';
+                    document.getElementById('username').value = 'rajkumar';
+                    document.getElementById('password').value = 'password123';
+                    document.getElementById('confirmPassword').value = 'password123';
+                    
+                    // Show success message
+                    alert('Voice registration successful! Form filled automatically.');
+                }, 2000);
+            });
+
+            // Password strength checker
+            passwordInput.addEventListener('input', function() {
+                const password = this.value;
+                let strength = 0;
+                let strengthText = 'Password strength';
+                
+                if (password.length >= 8) strength++;
+                if (password.match(/[a-z]/) && password.match(/[A-Z]/)) strength++;
+                if (password.match(/\d/)) strength++;
+                if (password.match(/[^a-zA-Z\d]/)) strength++;
+                
+                // Update strength indicator
+                switch(strength) {
+                    case 0:
+                    case 1:
+                        passwordStrengthBar.className = 'password-strength-bar strength-weak';
+                        passwordStrengthText.textContent = 'Weak password';
+                        break;
+                    case 2:
+                        passwordStrengthBar.className = 'password-strength-bar strength-medium';
+                        passwordStrengthText.textContent = 'Medium password';
+                        break;
+                    case 3:
+                        passwordStrengthBar.className = 'password-strength-bar strength-strong';
+                        passwordStrengthText.textContent = 'Strong password';
+                        break;
+                    case 4:
+                        passwordStrengthBar.className = 'password-strength-bar strength-very-strong';
+                        passwordStrengthText.textContent = 'Very strong password';
+                        break;
+                }
+            });
+            
+            // Password confirmation validation
+            confirmPasswordInput.addEventListener('input', function() {
+                if (this.value !== passwordInput.value) {
+                    this.style.borderColor = '#f5576c';
+                } else {
+                    this.style.borderColor = '#43e97b';
+                }
+            });
+            
+            registerForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                // Validate passwords match
+                if (passwordInput.value !== confirmPasswordInput.value) {
+                    const messageDiv = document.getElementById('message');
+                    messageDiv.textContent = 'Passwords do not match!';
+                    messageDiv.className = 'message error';
+                    messageDiv.style.display = 'block';
+                    return;
+                }
+                
+                // Add loading animation
+                submitBtn.classList.add('loading');
+                submitBtn.disabled = true;
+                
+                // Simulate API call (replace with actual registration logic)
+                setTimeout(() => {
+                    submitBtn.classList.remove('loading');
+                    submitBtn.disabled = false;
+                    
+                    // Show success message (replace with actual validation)
+                    const messageDiv = document.getElementById('message');
+                    messageDiv.textContent = 'Registration successful! Redirecting to login...';
+                    messageDiv.className = 'message success';
+                    messageDiv.style.display = 'block';
+                    
+                    // Redirect to login page (replace with actual redirect)
+                    setTimeout(() => {
+                        window.location.href = 'index.html';
+                    }, 2000);
+                    
+                }, 2000);
+            });
+            
+            // Add focus animations to inputs
+            const inputs = document.querySelectorAll('input, select');
+            inputs.forEach(input => {
+                input.addEventListener('focus', function() {
+                    this.parentElement.style.transform = 'scale(1.02)';
+                });
+                
+                input.addEventListener('blur', function() {
+                    this.parentElement.style.transform = 'scale(1)';
+                });
+            });
+
+            // Initialize with English
+            languageSelect.value = 'en';
+            const event = new Event('change');
+            languageSelect.dispatchEvent(event);
+        });
+    </script>
+</body>
+</html>

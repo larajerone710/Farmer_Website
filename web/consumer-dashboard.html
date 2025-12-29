@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Consumer Dashboard - Direct Farm Market</title>
+    <style>
+        /* Same CSS as farmer dashboard but with consumer-specific colors */
+        :root {
+            --primary-gradient: linear-gradient(135deg, #2196F3 0%, #21CBF3 100%);
+            /* Other variables same as farmer dashboard */
+        }
+
+        .consumer-stats .stat-card:nth-child(1) { background: var(--primary-gradient); color: white; }
+        .consumer-stats .stat-card:nth-child(2) { background: var(--success-gradient); color: white; }
+        .consumer-stats .stat-card:nth-child(3) { background: var(--warning-gradient); color: white; }
+    </style>
+</head>
+<body>
+    <div class="dashboard-container">
+        <header>
+            <div class="header-content">
+                <div class="header-left">
+                    <h1 data-translate="welcome">🛒 Consumer Dashboard</h1>
+                    <div class="system-status" data-translate="fresh_produce">Shop fresh farm products directly</div>
+                </div>
+                <div class="user-info">
+                    <span id="userFullName">Loading...</span>
+                    <span class="user-role" data-translate="consumer">Consumer</span>
+                    <!-- Same language selector and logout as farmer -->
+                </div>
+            </div>
+        </header>
+        
+        <nav class="top-nav">
+            <div class="nav-container">
+                <button id="dashboardBtn" class="nav-btn active" data-translate="dashboard">📊 Dashboard</button>
+                <button id="marketplaceBtn" class="nav-btn" data-translate="marketplace">🛒 Marketplace</button>
+                <button id="ordersBtn" class="nav-btn" data-translate="my_orders">📦 My Orders</button>
+                <button id="profileBtn" class="nav-btn" data-translate="profile">👤 Profile</button>
+            </div>
+        </nav>
+        
+        <div class="dashboard-content">
+            <main class="main-content">
+                <!-- Consumer Dashboard Section -->
+                <section id="dashboardSection" class="content-section">
+                    <div class="section-header">
+                        <h2 data-translate="consumer_dashboard">Consumer Dashboard</h2>
+                        <p data-translate="shop_fresh">Shop fresh farm products directly from farmers</p>
+                    </div>
+                    
+                    <div class="stats-grid consumer-stats">
+                        <div class="stat-card">
+                            <div class="stat-icon">🛒</div>
+                            <div class="stat-number" id="totalOrders">0</div>
+                            <div class="stat-label" data-translate="total_orders">Total Orders</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon">💰</div>
+                            <div class="stat-number" id="totalSpent">$0</div>
+                            <div class="stat-label" data-translate="total_spent">Total Spent</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon">⭐</div>
+                            <div class="stat-number" id="savings">$0</div>
+                            <div class="stat-label" data-translate="total_savings">Total Savings</div>
+                        </div>
+                    </div>
+                    
+                    <div class="section-header">
+                        <h2 data-translate="featured_products">Featured Products</h2>
+                        <p data-translate="fresh_today">Fresh from farms today</p>
+                    </div>
+                    
+                    <div id="featuredProducts" class="products-grid">
+                        <!-- Featured products will be loaded here -->
+                    </div>
+                </section>
+
+                <!-- Marketplace Section -->
+                <section id="marketplaceSection" class="content-section hidden">
+                    <div class="section-header">
+                        <h2 data-translate="marketplace">Farm Fresh Marketplace</h2>
+                        <p data-translate="direct_farmers">Direct from farmers to your table</p>
+                    </div>
+                    
+                    <div class="filters">
+                        <select id="categoryFilter">
+                            <option value="" data-translate="all_categories">All Categories</option>
+                            <option value="vegetables">🥬 Vegetables</option>
+                            <option value="fruits">🍎 Fruits</option>
+                            <option value="grains">🌾 Grains</option>
+                            <option value="dairy">🥛 Dairy</option>
+                        </select>
+                        <button id="applyFilters" class="btn-primary" data-translate="apply_filters">Apply Filters</button>
+                    </div>
+                    
+                    <div id="productsGrid" class="products-grid">
+                        <!-- All products will be loaded here -->
+                    </div>
+                </section>
+
+                <!-- Orders Section -->
+                <section id="ordersSection" class="content-section hidden">
+                    <div class="section-header">
+                        <h2 data-translate="my_orders">My Orders</h2>
+                        <p data-translate="order_history">Your order history and tracking</p>
+                    </div>
+                    
+                    <div id="ordersList">
+                        <!-- Consumer orders will be loaded here -->
+                    </div>
+                </section>
+
+                <!-- Profile Section -->
+                <section id="profileSection" class="content-section hidden">
+                    <!-- Similar to farmer profile but for consumer -->
+                </section>
+            </main>
+        </div>
+    </div>
+
+    <!-- Voice Assistant -->
+    <div class="voice-assistant">
+        <button class="voice-btn" id="voiceAssistantBtn" title="Voice Assistant">🎤</button>
+    </div>
+
+    <script>
+        // Consumer-specific JavaScript
+        // Similar structure to farmer dashboard but with consumer functionality
+        // Includes features like:
+        // - Browsing products
+        // - Adding to cart
+        // - Placing orders
+        // - Viewing order history
+        // - Voice commands for shopping
+    </script>
+</body>
+</html>

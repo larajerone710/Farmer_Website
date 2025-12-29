@@ -1,0 +1,2487 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Direct Farm Market - Dashboard</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Reset and base styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-gradient: linear-gradient(135deg, #4CAF50 0%, #45a049 100%);
+            --secondary-gradient: linear-gradient(135deg, #FF9800 0%, #FF5722 100%);
+            --success-gradient: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            --warning-gradient: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+            --info-gradient: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+            --light-gradient: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+            --dark-gradient: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            --sidebar-gradient: linear-gradient(135deg, #4CAF50 0%, #45a049 100%);
+            --header-gradient: linear-gradient(135deg, #4CAF50 0%, #8BC34A 100%);
+            --card-gradient: linear-gradient(135deg, #fdfcfb 0%, #e2d1c3 100%);
+            --nav-gradient: linear-gradient(135deg, #C8E6C9 0%, #A5D6A7 100%);
+            --blog-gradient: linear-gradient(135deg, #4CAF50 0%, #45a049 100%);
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #4CAF50 0%, #2196F3 50%, #FF9800 100%);
+            background-size: 400% 400%;
+            animation: gradientShift 15s ease infinite;
+            color: #2c3e50;
+            line-height: 1.6;
+            min-height: 100vh;
+            position: relative;
+            overflow-x: auto;
+        }
+
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* Floating elements */
+        .floating-element {
+            position: absolute;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.2);
+            animation: float 15s infinite linear;
+            z-index: 0;
+        }
+
+        .floating-element:nth-child(1) {
+            width: 100px;
+            height: 100px;
+            top: 10%;
+            left: 10%;
+            animation-delay: 0s;
+        }
+
+        .floating-element:nth-child(2) {
+            width: 150px;
+            height: 150px;
+            top: 70%;
+            left: 80%;
+            animation-delay: -5s;
+        }
+
+        .floating-element:nth-child(3) {
+            width: 80px;
+            height: 80px;
+            top: 20%;
+            left: 85%;
+            animation-delay: -10s;
+        }
+
+        .floating-element:nth-child(4) {
+            width: 120px;
+            height: 120px;
+            top: 80%;
+            left: 15%;
+            animation-delay: -7s;
+        }
+
+        @keyframes float {
+            0% { transform: translate(0, 0) rotate(0deg); }
+            25% { transform: translate(100px, 50px) rotate(90deg); }
+            50% { transform: translate(50px, 100px) rotate(180deg); }
+            75% { transform: translate(-50px, 50px) rotate(270deg); }
+            100% { transform: translate(0, 0) rotate(360deg); }
+        }
+
+        /* Dashboard Styles */
+        .dashboard-container {
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+        }
+
+        header {
+            background: var(--header-gradient);
+            color: white;
+            padding: 1rem 2rem;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header-left h1 {
+            font-size: 1.8rem;
+            margin-bottom: 0.2rem;
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.2);
+        }
+
+        .system-status {
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .user-role {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            backdrop-filter: blur(5px);
+        }
+
+        .btn-logout {
+            background: rgba(231, 76, 60, 0.8);
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.3s;
+            backdrop-filter: blur(5px);
+        }
+
+        .btn-logout:hover {
+            background: rgba(192, 57, 43, 0.9);
+            transform: translateY(-2px);
+        }
+
+        /* Top Navigation */
+        .top-nav {
+            background: var(--nav-gradient);
+            padding: 0.5rem 2rem;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .nav-container {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .nav-btn {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.7rem 1.2rem;
+            background: rgba(255, 255, 255, 0.7);
+            border: none;
+            border-radius: 6px;
+            color: #555;
+            text-align: left;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 0.9rem;
+            backdrop-filter: blur(5px);
+        }
+
+        .nav-btn:hover {
+            background: rgba(255, 255, 255, 0.9);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .nav-btn.active {
+            background: var(--primary-gradient);
+            color: white;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .dashboard-content {
+            flex: 1;
+            padding: 2rem;
+            overflow-y: auto;
+        }
+
+        .main-content {
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 12px;
+            padding: 2rem;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            backdrop-filter: blur(10px);
+        }
+
+        .content-section {
+            display: block;
+        }
+
+        .content-section.hidden {
+            display: none;
+        }
+
+        .section-header {
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid rgba(76, 175, 80, 0.2);
+        }
+
+        .section-header h2 {
+            color: #2c3e50;
+            margin-bottom: 0.5rem;
+            font-size: 1.8rem;
+        }
+
+        .section-header p {
+            color: #7f8c8d;
+            font-size: 1rem;
+        }
+
+        /* Stats Grid */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: var(--card-gradient);
+            padding: 1.5rem;
+            border-radius: 12px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            transition: all 0.3s;
+            border: 1px solid rgba(255, 255, 255, 0.5);
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+        }
+
+        .stat-card:nth-child(1) {
+            background: var(--primary-gradient);
+            color: white;
+        }
+
+        .stat-card:nth-child(2) {
+            background: var(--success-gradient);
+            color: white;
+        }
+
+        .stat-card:nth-child(3) {
+            background: var(--info-gradient);
+            color: white;
+        }
+
+        .stat-card:nth-child(4) {
+            background: var(--warning-gradient);
+            color: white;
+        }
+
+        .stat-icon {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+            filter: drop-shadow(1px 1px 2px rgba(0, 0, 0, 0.2));
+        }
+
+        .stat-number {
+            font-size: 2.2rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+
+        /* Products Grid */
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 25px;
+            margin-top: 20px;
+        }
+        
+        .product-card {
+            border: 1px solid #e0e0e0;
+            border-radius: 15px;
+            overflow: auto;
+            transition: all 0.3s;
+            background: white;
+        }
+        
+        .product-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .product-image {
+            height: 180px;
+            background: linear-gradient(135deg, var(--primary-gradient));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 14px;
+            position: relative;
+        }
+
+        .product-badge {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: var(--secondary-gradient);
+            color: white;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+        
+        .product-info {
+            padding: 15px;
+        }
+        
+        .product-name {
+            font-weight: 600;
+            margin-bottom: 5px;
+            font-size: 18px;
+        }
+        
+        .product-farmer {
+            color: var(--gray);
+            font-size: 14px;
+            margin-bottom: 10px;
+        }
+        
+        .product-price {
+            color: var(--primary);
+            font-weight: bold;
+            font-size: 18px;
+            margin-bottom: 15px;
+        }
+
+        .product-description {
+            color: var(--gray);
+            font-size: 14px;
+            margin-bottom: 15px;
+            line-height: 1.4;
+        }
+        
+        .product-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .btn {
+            padding: 8px 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: 600;
+            flex: 1;
+            text-align: center;
+        }
+
+        .btn-primary {
+            background: var(--primary-gradient);
+            color: white;
+        }
+
+        .btn-secondary {
+            background: var(--secondary-gradient);
+            color: white;
+        }
+
+        .btn-danger {
+            background: var(--danger);
+            color: white;
+        }
+
+        .btn-success {
+            background: var(--success);
+            color: white;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 3px 8px rgba(0,0,0,0.2);
+        }
+
+        /* Forms */
+        .form-container {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 600;
+            color: var(--dark);
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 2px rgba(76, 175, 80, 0.2);
+        }
+
+        textarea.form-control {
+            min-height: 100px;
+            resize: vertical;
+        }
+
+        /* Tables */
+        .table-container {
+            overflow-x: auto;
+            margin-top: 20px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+            border-radius: 10px;
+            overflow: auto;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        th, td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        th {
+            background: var(--primary-gradient);
+            color: white;
+            font-weight: 600;
+        }
+
+        tr:hover {
+            background: rgba(76, 175, 80, 0.05);
+        }
+
+        .status-badge {
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .status-pending {
+            background: rgba(255, 193, 7, 0.2);
+            color: #856404;
+        }
+
+        .status-completed {
+            background: rgba(40, 167, 69, 0.2);
+            color: #155724;
+        }
+
+        .status-cancelled {
+            background: rgba(220, 53, 69, 0.2);
+            color: #721c24;
+        }
+
+        /* Blog Section */
+        .blog-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 25px;
+            margin-top: 20px;
+        }
+
+        .blog-card {
+            background: white;
+            border-radius: 15px;
+            overflow: auto;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            transition: all 0.3s;
+        }
+
+        .blog-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+        }
+
+        .blog-image {
+            height: 180px;
+            background: var(--primary-gradient);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 14px;
+        }
+
+        .blog-content {
+            padding: 20px;
+        }
+
+        .blog-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 10px;
+            color: var(--dark);
+        }
+
+        .blog-excerpt {
+            color: var(--gray);
+            font-size: 14px;
+            line-height: 1.5;
+            margin-bottom: 15px;
+        }
+
+        .blog-meta {
+            display: flex;
+            justify-content: space-between;
+            color: var(--gray);
+            font-size: 12px;
+        }
+
+        /* Technology Blog Section */
+        .tech-blog-section {
+            margin: 2rem 0;
+        }
+
+        .tech-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .tech-card {
+            background: var(--card-gradient);
+            border-radius: 12px;
+            padding: 2rem;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s;
+            border: 1px solid rgba(255, 255, 255, 0.5);
+        }
+
+        .tech-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+        }
+
+        .tech-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            text-align: center;
+        }
+
+        .tech-card h3 {
+            color: #2c3e50;
+            margin-bottom: 1rem;
+            font-size: 1.4rem;
+        }
+
+        .tech-card p {
+            color: #7f8c8d;
+            line-height: 1.6;
+        }
+
+        /* Process Flow */
+        .process-flow {
+            text-align: center;
+            margin: 3rem 0;
+            padding: 2rem;
+            background: var(--light-gradient);
+            border-radius: 12px;
+        }
+
+        .flow-steps {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 2rem 0;
+            position: relative;
+        }
+
+        .flow-step {
+            flex: 1;
+            text-align: center;
+            padding: 1rem;
+            position: relative;
+        }
+
+        .step-number {
+            width: 50px;
+            height: 50px;
+            background: var(--primary-gradient);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1rem;
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+
+        .step-arrow {
+            font-size: 2rem;
+            color: #4CAF50;
+        }
+
+        /* Voice Assistant */
+        .voice-assistant {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            z-index: 1000;
+        }
+
+        .voice-btn {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: var(--primary-gradient);
+            color: white;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s;
+        }
+
+        .voice-btn:hover {
+            transform: scale(1.1);
+        }
+
+        .voice-btn.listening {
+            animation: pulse 1.5s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                gap: 1rem;
+                text-align: center;
+            }
+            
+            .nav-container {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .flow-steps {
+                flex-direction: column;
+            }
+            
+            .step-arrow {
+                transform: rotate(90deg);
+                margin: 1rem 0;
+            }
+            /* Payment Method Buttons */
+.payment-method-btn {
+    flex: 1;
+    min-width: 120px;
+    padding: 1rem;
+    border: 2px solid #e0e0e0;
+    border-radius: 8px;
+    background: white;
+    cursor: pointer;
+    transition: all 0.3s;
+    text-align: center;
+}
+
+.payment-method-btn:hover {
+    border-color: #4CAF50;
+    transform: translateY(-2px);
+}
+
+.payment-method-btn.active {
+    border-color: #4CAF50;
+    background: rgba(76, 175, 80, 0.1);
+}
+
+/* Payment Forms */
+.payment-form {
+    margin-top: 1.5rem;
+    padding: 1.5rem;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    background: #f9f9f9;
+}
+
+/* Star Rating */
+.star {
+    cursor: pointer;
+    font-size: 1.5rem;
+    color: #ccc;
+    transition: color 0.2s;
+}
+
+.star:hover,
+.star.active {
+    color: #FFD700;
+}
+
+/* Feedback Items */
+.feedback-item {
+    transition: transform 0.2s;
+}
+
+.feedback-item:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+/* Category Badges */
+.category-badge {
+    text-transform: capitalize;
+}
+        }
+    </style>
+</head>
+<body>
+    <!-- Floating background elements -->
+    <div class="floating-element"></div>
+    <div class="floating-element"></div>
+    <div class="floating-element"></div>
+    <div class="floating-element"></div>
+
+    <div class="dashboard-container">
+        <header>
+            <div class="header-content">
+                <div class="header-left">
+                    <h1>🌱 Direct Farm Market</h1>
+                    <div class="system-status">Farm to Table, Direct to You</div>
+                </div>
+                <div class="user-info">
+                    <span id="userFullName">Loading...</span>
+                    <span class="user-role" id="userRole">Farmer</span>
+                    <button id="logoutBtn" class="btn-logout">🚪 Logout</button>
+                </div>
+            </div>
+        </header>
+        
+        <nav class="top-nav">
+            <div class="nav-container" id="navContainer">
+                <!-- Navigation buttons will be populated based on role -->
+            </div>
+        </nav>
+        
+        <div class="dashboard-content">
+            <main class="main-content">
+                <!-- Dashboard Section -->
+                <section id="dashboardSection" class="content-section">
+                    <div class="section-header">
+                        <h2 id="dashboardTitle">Farm Dashboard</h2>
+                        <p id="dashboardSubtitle">Manage your farm business and track performance</p>
+                    </div>
+                    
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <div class="stat-icon">🌾</div>
+                            <div class="stat-number" id="totalProducts">0</div>
+                            <div class="stat-label">Total Products</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon">📦</div>
+                            <div class="stat-number" id="totalOrders">0</div>
+                            <div class="stat-label">Total Orders</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon">💰</div>
+                            <div class="stat-number" id="totalRevenue">$0</div>
+                            <div class="stat-label">Total Revenue</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon">⭐</div>
+                            <div class="stat-number" id="rating">4.8</div>
+                            <div class="stat-label">Customer Rating</div>
+                        </div>
+                    </div>
+                    
+                    <div class="section-header">
+                        <h2>Farming Technology</h2>
+                        <p>Latest innovations in agricultural technology</p>
+                    </div>
+                    
+                    <div class="tech-blog-section">
+                        <div class="tech-grid">
+                            <div class="tech-card">
+                                <div class="tech-icon">🌱</div>
+                                <h3>Smart Irrigation Systems</h3>
+                                <p>Advanced IoT-based irrigation systems that optimize water usage based on soil moisture levels and weather forecasts.</p>
+                                <p><strong>Benefits:</strong> 40% water savings, Increased crop yield, Automated scheduling</p>
+                            </div>
+                            
+                            <div class="tech-card">
+                                <div class="tech-icon">📱</div>
+                                <h3>Farm Management Apps</h3>
+                                <p>Mobile applications that help farmers track inventory, manage orders, and monitor farm operations in real-time.</p>
+                                <p><strong>Features:</strong> Inventory management, Order tracking, Financial analytics</p>
+                            </div>
+                            
+                            <div class="tech-card">
+                                <div class="tech-icon">🚜</div>
+                                <h3>Precision Agriculture</h3>
+                                <p>Using GPS, drones, and sensors to optimize field-level management regarding crop farming.</p>
+                                <p><strong>Technologies:</strong> GPS guidance, Drones, Soil sensors, Automated steering</p>
+                            </div>
+                            
+                            <div class="tech-card">
+                                <div class="tech-icon">🌞</div>
+                                <h3>Solar-Powered Solutions</h3>
+                                <p>Renewable energy systems for farm operations including solar-powered irrigation and processing equipment.</p>
+                                <p><strong>Advantages:</strong> Reduced energy costs, Sustainable operations, Energy independence</p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- My Products Section -->
+                <section id="myProductsSection" class="content-section hidden">
+                    <div class="section-header">
+                        <h2>My Products</h2>
+                        <p>Manage your farm products and inventory</p>
+                    </div>
+                    
+                    <div class="form-container">
+                        <h3>Add New Product</h3>
+                        <form id="addProductForm">
+                            <div class="form-group">
+                                <label for="productName">Product Name</label>
+                                <input type="text" id="productName" class="form-control" placeholder="Enter product name" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="productCategory">Category</label>
+                                <select id="productCategory" class="form-control" required>
+                                    <option value="">Select Category</option>
+                                    <option value="vegetables">Vegetables</option>
+                                    <option value="fruits">Fruits</option>
+                                    <option value="grains">Grains</option>
+                                    <option value="dairy">Dairy</option>
+                                    <option value="other">Other</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="productDescription">Description</label>
+                                <textarea id="productDescription" class="form-control" placeholder="Enter product description" required></textarea>
+                            </div>
+                            <div class="form-group">
+                                <label for="productPrice">Price ($)</label>
+                                <input type="number" id="productPrice" class="form-control" placeholder="Enter price" step="0.01" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="productQuantity">Quantity</label>
+                                <input type="number" id="productQuantity" class="form-control" placeholder="Enter quantity" required>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Add Product</button>
+                        </form>
+                    </div>
+                    
+                    <h3>My Products</h3>
+                    <div id="myProductsGrid" class="products-grid">
+                        <!-- Products will be loaded here -->
+                    </div>
+                </section>
+
+                <!-- Orders Section -->
+                <section id="ordersSection" class="content-section hidden">
+                    <div class="section-header">
+                        <h2 id="ordersTitle">Customer Orders</h2>
+                        <p id="ordersSubtitle">Manage and fulfill customer orders</p>
+                    </div>
+                    
+                    <div id="ordersList">
+                        <!-- Orders will be loaded here -->
+                    </div>
+                </section>
+
+                <!-- Marketplace Section -->
+                <section id="marketplaceSection" class="content-section hidden">
+                    <div class="section-header">
+                        <h2>Farm Fresh Marketplace</h2>
+                        <p>Discover fresh products directly from farmers</p>
+                    </div>
+                    
+                    <div id="marketplaceGrid" class="products-grid">
+                        <!-- Marketplace products will be loaded here -->
+                    </div>
+                </section>
+
+                <!-- Cart Section -->
+                <section id="cartSection" class="content-section hidden">
+                    <div class="section-header">
+                        <h2>My Shopping Cart</h2>
+                        <p>Review your selected items</p>
+                    </div>
+                    
+                    <div id="cartItems">
+                        <!-- Cart items will be loaded here -->
+                    </div>
+                </section>
+
+                <!-- Blog Section -->
+                <section id="blogSection" class="content-section hidden">
+                    <div class="section-header">
+                        <h2>Farming Technology Blog</h2>
+                        <p>Latest innovations and trends in agriculture</p>
+                    </div>
+                    
+                    <div class="blog-grid">
+                        <div class="blog-card">
+                            <div class="blog-image">
+                                <span style="font-size: 40px;">🌱</span>
+                            </div>
+                            <div class="blog-content">
+                                <div class="blog-title">The Future of Sustainable Farming</div>
+                                <div class="blog-excerpt">Exploring how technology is revolutionizing sustainable agriculture practices and helping farmers reduce environmental impact.</div>
+                                <div class="blog-meta">
+                                    <span>2023-10-15</span>
+                                    <span>Sustainability</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="blog-card">
+                            <div class="blog-image">
+                                <span style="font-size: 40px;">📱</span>
+                            </div>
+                            <div class="blog-content">
+                                <div class="blog-title">Mobile Apps for Modern Farmers</div>
+                                <div class="blog-excerpt">How smartphone applications are helping farmers manage their operations, track inventory, and connect directly with consumers.</div>
+                                <div class="blog-meta">
+                                    <span>2023-10-10</span>
+                                    <span>Technology</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="blog-card">
+                            <div class="blog-image">
+                                <span style="font-size: 40px;">💧</span>
+                            </div>
+                            <div class="blog-content">
+                                <div class="blog-title">Smart Irrigation Systems</div>
+                                <div class="blog-excerpt">Advanced irrigation technologies that use sensors and weather data to optimize water usage and improve crop yields.</div>
+                                <div class="blog-meta">
+                                    <span>2023-10-05</span>
+                                    <span>Irrigation</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                <!-- Add this after the Blog Section -->
+<section id="favoritesSection" class="content-section hidden">
+    <div class="section-header">
+        <h2>My Favorites</h2>
+        <p>Your favorite farm products</p>
+    </div>
+    
+    <div id="favoritesGrid" class="products-grid">
+        <!-- Favorite products will be loaded here -->
+    </div>
+</section>
+<!-- Payment Section -->
+<section id="paymentSection" class="content-section hidden">
+    <div class="section-header">
+        <h2>Secure Payment</h2>
+        <p>Complete your purchase with secure payment options</p>
+    </div>
+    
+    <div class="form-container">
+        <h3>Order Summary</h3>
+        <div id="paymentSummary">
+            <!-- Order summary will be loaded here -->
+        </div>
+        
+        <div class="payment-options" style="margin-top: 2rem;">
+            <h3>Select Payment Method</h3>
+            
+            <div class="payment-methods" style="display: flex; gap: 1rem; margin: 1rem 0; flex-wrap: wrap;">
+                <button class="payment-method-btn active" data-method="credit">
+                    💳 Credit Card
+                </button>
+                <button class="payment-method-btn" data-method="debit">
+                    🏦 Debit Card
+                </button>
+                <button class="payment-method-btn" data-method="scanner">
+                    📱 QR Scanner
+                </button>
+            </div>
+            
+            <!-- Credit/Debit Card Form -->
+            <div id="cardPaymentForm" class="payment-form">
+                <form id="cardPaymentForm">
+                    <div class="form-group">
+                        <label for="cardNumber">Card Number</label>
+                        <input type="text" id="cardNumber" class="form-control" placeholder="1234 5678 9012 3456" maxlength="19">
+                    </div>
+                    <div style="display: flex; gap: 1rem;">
+                        <div class="form-group" style="flex: 1;">
+                            <label for="expiryDate">Expiry Date</label>
+                            <input type="text" id="expiryDate" class="form-control" placeholder="MM/YY" maxlength="5">
+                        </div>
+                        <div class="form-group" style="flex: 1;">
+                            <label for="cvv">CVV</label>
+                            <input type="text" id="cvv" class="form-control" placeholder="123" maxlength="3">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="cardHolder">Card Holder Name</label>
+                        <input type="text" id="cardHolder" class="form-control" placeholder="John Doe">
+                    </div>
+                    <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 1rem;">
+                        Pay Now
+                    </button>
+                </form>
+            </div>
+            
+            <!-- QR Scanner Payment -->
+            <div id="qrPaymentForm" class="payment-form hidden">
+                <div style="text-align: center; padding: 2rem;">
+                    <div style="background: #f5f5f5; padding: 2rem; border-radius: 10px; display: inline-block;">
+                        <div style="font-size: 3rem; margin-bottom: 1rem;">📱</div>
+                        <h4>Scan to Pay</h4>
+                        <p>Use your mobile banking app to scan the QR code</p>
+                        <div style="background: white; padding: 1rem; border-radius: 8px; display: inline-block; margin: 1rem 0;">
+                            <div style="width: 200px; height: 200px; background: linear-gradient(45deg, #4CAF50, #2196F3); display: flex; align-items: center; justify-content: center; color: white; font-weight: bold;">
+                                QR CODE
+                            </div>
+                        </div>
+                        <p><small>Amount: <span id="qrAmount">$0.00</span></small></p>
+                        <button class="btn btn-primary" onclick="simulateQRPayment()">
+                            Simulate QR Payment
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Feedback Section -->
+<section id="feedbackSection" class="content-section hidden">
+    <div class="section-header">
+        <h2>Customer Feedback</h2>
+        <p>Share your experience and help us improve</p>
+    </div>
+    
+    <div class="form-container">
+        <h3>Submit Your Feedback</h3>
+        <form id="feedbackForm">
+            <div class="form-group">
+                <label for="feedbackOrder">Order ID (Optional)</label>
+                <select id="feedbackOrder" class="form-control">
+                    <option value="">Select Order</option>
+                    <!-- Orders will be populated here -->
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label for="feedbackRating">Overall Rating</label>
+                <div class="rating-stars" style="display: flex; gap: 0.5rem; margin: 0.5rem 0;">
+                    <span class="star" data-rating="1">⭐</span>
+                    <span class="star" data-rating="2">⭐</span>
+                    <span class="star" data-rating="3">⭐</span>
+                    <span class="star" data-rating="4">⭐</span>
+                    <span class="star" data-rating="5">⭐</span>
+                </div>
+                <input type="hidden" id="feedbackRating" value="0">
+            </div>
+            
+            <div class="form-group">
+                <label for="feedbackCategory">Feedback Category</label>
+                <select id="feedbackCategory" class="form-control" required>
+                    <option value="">Select Category</option>
+                    <option value="product-quality">Product Quality</option>
+                    <option value="delivery">Delivery Service</option>
+                    <option value="customer-service">Customer Service</option>
+                    <option value="website-experience">Website Experience</option>
+                    <option value="other">Other</option>
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label for="feedbackTitle">Title</label>
+                <input type="text" id="feedbackTitle" class="form-control" placeholder="Brief summary of your feedback" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="feedbackMessage">Your Feedback</label>
+                <textarea id="feedbackMessage" class="form-control" placeholder="Please share your experience in detail..." rows="5" required></textarea>
+            </div>
+            
+            <div class="form-group">
+                <label>
+                    <input type="checkbox" id="allowContact" checked>
+                    Allow us to contact you about this feedback
+                </label>
+            </div>
+            
+            <button type="submit" class="btn btn-primary">Submit Feedback</button>
+        </form>
+    </div>
+    
+    <!-- Previous Feedback Section -->
+    <div class="form-container" style="margin-top: 2rem;">
+        <h3>Your Previous Feedback</h3>
+        <div id="previousFeedback">
+            <!-- Previous feedback will be loaded here -->
+        </div>
+    </div>
+</section>
+            </main>
+        </div>
+    </div>
+
+    <!-- Voice Assistant -->
+    <div class="voice-assistant">
+        <button class="voice-btn" id="voiceAssistantBtn" title="Voice Assistant">
+            <i class="fas fa-microphone"></i>
+        </button>
+    </div>
+
+    <script>
+    let currentRole = userType || 'farmer'; // Default to farmer if not specified
+    let currentUserData = {
+        name: userName || (userType === 'consumer' ? 'Sarah Consumer' : 'John Farmer'),
+        role: userType || 'farmer'
+    };
+
+    // Add cart and favorites arrays
+    let cart = [];
+    let favorites = [];
+
+    // Sample data
+    const farmerProducts = [
+        { id: 1, name: 'Organic Carrots', category: 'vegetables', price: 2.99, unit: 'kg', quantity: 50, description: 'Fresh organic carrots from our farm', image: '🥕' },
+        { id: 2, name: 'Fresh Apples', category: 'fruits', price: 3.49, unit: 'kg', quantity: 30, description: 'Sweet and crunchy apples', image: '🍎' },
+        { id: 3, name: 'Farm Eggs', category: 'dairy', price: 4.99, unit: 'dozen', quantity: 20, description: 'Free-range farm eggs', image: '🥚' }
+    ];
+
+    const consumerProducts = [
+        { id: 1, name: 'Organic Carrots', farmer: 'Green Valley Farms', price: 2.99, unit: 'kg', description: 'Fresh organic carrots from our farm', image: '🥕', rating: 4.5 },
+        { id: 2, name: 'Fresh Apples', farmer: 'Sunny Orchard', price: 3.49, unit: 'kg', description: 'Sweet and crunchy apples', image: '🍎', rating: 4.7 },
+        { id: 3, name: 'Farm Eggs', farmer: 'Happy Hens Farm', price: 4.99, unit: 'dozen', description: 'Free-range farm eggs', image: '🥚', rating: 4.8 }
+    ];
+
+    const farmerOrders = [
+        { id: 1045, customer: 'Fresh Market', date: '2023-10-22', amount: 68.50, status: 'processing', items: 5 },
+        { id: 1044, customer: 'Local Grocer', date: '2023-10-21', amount: 42.75, status: 'shipped', items: 3 }
+    ];
+
+    const consumerOrders = [
+        { id: 1003, date: '2023-10-20', total: 62.25, status: 'processing', items: 5 },
+        { id: 1002, date: '2023-10-18', total: 28.50, status: 'delivered', items: 3 }
+    ];
+
+    // DOM Elements
+    const userFullName = document.getElementById('userFullName');
+    const userRole = document.getElementById('userRole');
+    const logoutBtn = document.getElementById('logoutBtn');
+    const navContainer = document.getElementById('navContainer');
+    const contentSections = document.querySelectorAll('.content-section');
+    const dashboardTitle = document.getElementById('dashboardTitle');
+    const dashboardSubtitle = document.getElementById('dashboardSubtitle');
+    const ordersTitle = document.getElementById('ordersTitle');
+    const ordersSubtitle = document.getElementById('ordersSubtitle');
+    const voiceAssistantBtn = document.getElementById('voiceAssistantBtn');
+
+    // Initialize the application
+    document.addEventListener('DOMContentLoaded', function() {
+        initializeUser();
+        setupEventListeners();
+        initializeDashboard();
+    });
+
+    function initializeUser() {
+        // Get user data from URL parameters or localStorage
+        const urlParams = new URLSearchParams(window.location.search);
+        const userType = urlParams.get('userType') || 'farmer';
+        const userName = urlParams.get('fullName') || 'John Farmer';
+        
+        currentRole = userType;
+        currentUserData.name = userName;
+        currentUserData.role = userType;
+        
+        // Update UI
+        userFullName.textContent = `Welcome, ${currentUserData.name}!`;
+        userRole.textContent = currentUserData.role === 'farmer' ? 'Farmer' : 'Consumer';
+        
+        // Update dashboard titles based on role
+        if (currentRole === 'farmer') {
+            dashboardTitle.textContent = 'Farm Dashboard';
+            dashboardSubtitle.textContent = 'Manage your farm business and track performance';
+            ordersTitle.textContent = 'Customer Orders';
+            ordersSubtitle.textContent = 'Manage and fulfill customer orders';
+        } else {
+            dashboardTitle.textContent = 'Shopping Dashboard';
+            dashboardSubtitle.textContent = 'Discover fresh farm products and track your orders';
+            ordersTitle.textContent = 'My Orders';
+            ordersSubtitle.textContent = 'Track your purchases and order history';
+        }
+    }
+
+    function setupEventListeners() {
+        // Logout
+        logoutBtn.addEventListener('click', function() {
+            if (confirm('Are you sure you want to logout?')) {
+                window.location.href = 'index.html';
+            }
+        });
+        
+        // Voice assistant
+        voiceAssistantBtn.addEventListener('click', function() {
+            activateVoiceAssistant();
+        });
+    }
+
+    function initializeDashboard() {
+        // Build navigation based on role
+        buildNavigation();
+        
+        // Load initial content
+        switchSection('dashboardSection');
+        
+        // Update stats
+        updateStats();
+    }
+
+    function buildNavigation() {
+    let navButtons = '';
+    
+    if (currentRole === 'farmer') {
+        navButtons = `
+            <button class="nav-btn active" onclick="switchSection('dashboardSection')">📊 Dashboard</button>
+            <button class="nav-btn" onclick="switchSection('myProductsSection')">🌾 My Products</button>
+            <button class="nav-btn" onclick="switchSection('ordersSection')">📦 Orders</button>
+            <button class="nav-btn" onclick="switchSection('blogSection')">📚 Technology Blog</button>
+        `;
+    } else {
+        navButtons = `
+            <button class="nav-btn active" onclick="switchSection('dashboardSection')">📊 Dashboard</button>
+            <button class="nav-btn" onclick="switchSection('marketplaceSection')">🛒 Marketplace</button>
+            <button class="nav-btn" onclick="switchSection('favoritesSection')">❤️ Favorites</button>
+            <button class="nav-btn" onclick="switchSection('ordersSection')">📦 My Orders</button>
+            <button class="nav-btn" onclick="switchSection('cartSection')">🛍️ Cart</button>
+            <button class="nav-btn" onclick="switchSection('paymentSection')">💳 Payment</button>
+            <button class="nav-btn" onclick="switchSection('feedbackSection')">📝 Feedback</button>
+            <button class="nav-btn" onclick="switchSection('blogSection')">📚 Technology Blog</button>
+        `;
+    }
+    
+    navContainer.innerHTML = navButtons;
+    updateCartBadge(); // Initialize cart badge
+}
+// Payment and Feedback functionality
+function loadPaymentContent() {
+    const paymentSummary = document.getElementById('paymentSummary');
+    const total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+    
+    paymentSummary.innerHTML = `
+        <div style="border: 1px solid #e0e0e0; border-radius: 8px; padding: 1rem;">
+            <h4>Order Details</h4>
+            ${cart.map(item => `
+                <div style="display: flex; justify-content: space-between; margin: 0.5rem 0;">
+                    <span>${item.name} (x${item.quantity})</span>
+                    <span>$${(item.price * item.quantity).toFixed(2)}</span>
+                </div>
+            `).join('')}
+            <hr>
+            <div style="display: flex; justify-content: space-between; font-weight: bold;">
+                <span>Total Amount:</span>
+                <span>$${total.toFixed(2)}</span>
+            </div>
+        </div>
+    `;
+    
+    // Update QR amount
+    document.getElementById('qrAmount').textContent = `$${total.toFixed(2)}`;
+    
+    // Setup payment method buttons
+    const paymentMethodBtns = document.querySelectorAll('.payment-method-btn');
+    paymentMethodBtns.forEach(btn => {
+        btn.addEventListener('click', function() {
+            paymentMethodBtns.forEach(b => b.classList.remove('active'));
+            this.classList.add('active');
+            
+            const method = this.getAttribute('data-method');
+            document.querySelectorAll('.payment-form').forEach(form => {
+                form.classList.add('hidden');
+            });
+            
+            if (method === 'credit' || method === 'debit') {
+                document.getElementById('cardPaymentForm').classList.remove('hidden');
+            } else if (method === 'scanner') {
+                document.getElementById('qrPaymentForm').classList.remove('hidden');
+            }
+        });
+    });
+    
+    // Setup card payment form
+    const cardPaymentForm = document.getElementById('cardPaymentForm');
+    if (cardPaymentForm) {
+        cardPaymentForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            processCardPayment();
+        });
+        
+        // Format card number
+        const cardNumberInput = document.getElementById('cardNumber');
+        if (cardNumberInput) {
+            cardNumberInput.addEventListener('input', function(e) {
+                let value = e.target.value.replace(/\s+/g, '').replace(/[^0-9]/gi, '');
+                let formattedValue = value.match(/.{1,4}/g)?.join(' ');
+                if (formattedValue) {
+                    e.target.value = formattedValue;
+                }
+            });
+        }
+        
+        // Format expiry date
+        const expiryDateInput = document.getElementById('expiryDate');
+        if (expiryDateInput) {
+            expiryDateInput.addEventListener('input', function(e) {
+                let value = e.target.value.replace(/\//g, '').replace(/[^0-9]/gi, '');
+                if (value.length >= 2) {
+                    value = value.substring(0, 2) + '/' + value.substring(2, 4);
+                }
+                e.target.value = value;
+            });
+        }
+    }
+}
+
+function processCardPayment() {
+    const cardNumber = document.getElementById('cardNumber').value;
+    const expiryDate = document.getElementById('expiryDate').value;
+    const cvv = document.getElementById('cvv').value;
+    const cardHolder = document.getElementById('cardHolder').value;
+    const total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+    
+    // Basic validation
+    if (!cardNumber || !expiryDate || !cvv || !cardHolder) {
+        alert('Please fill in all card details');
+        return;
+    }
+    
+    if (cardNumber.replace(/\s/g, '').length !== 16) {
+        alert('Please enter a valid 16-digit card number');
+        return;
+    }
+    
+    // Show processing animation
+    const submitBtn = document.querySelector('#cardPaymentForm button[type="submit"]');
+    const originalText = submitBtn.textContent;
+    submitBtn.textContent = 'Processing...';
+    submitBtn.disabled = true;
+    
+    // Simulate payment processing
+    setTimeout(() => {
+        submitBtn.textContent = originalText;
+        submitBtn.disabled = false;
+        
+        // Simulate successful payment
+        const isSuccess = Math.random() > 0.2; // 80% success rate for demo
+        
+        if (isSuccess) {
+            alert(`✅ Payment successful! $${total.toFixed(2)} has been processed.`);
+            
+            // Create order
+            const newOrder = {
+                id: Date.now(),
+                date: new Date().toISOString().split('T')[0],
+                total: total,
+                status: 'processing',
+                items: cart.length,
+                paymentMethod: document.querySelector('.payment-method-btn.active').getAttribute('data-method')
+            };
+            
+            consumerOrders.unshift(newOrder);
+            
+            // Clear cart
+            cart = [];
+            updateCartBadge();
+            
+            // Switch to orders section
+            switchSection('ordersSection');
+        } else {
+            alert('❌ Payment failed. Please check your card details and try again.');
+        }
+    }, 2000);
+}
+
+function simulateQRPayment() {
+    const total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+    
+    // Show processing
+    const qrBtn = document.querySelector('#qrPaymentForm .btn');
+    const originalText = qrBtn.textContent;
+    qrBtn.textContent = 'Processing Payment...';
+    qrBtn.disabled = true;
+    
+    // Simulate QR payment processing
+    setTimeout(() => {
+        qrBtn.textContent = originalText;
+        qrBtn.disabled = false;
+        
+        // Simulate successful payment
+        const isSuccess = Math.random() > 0.1; // 90% success rate for QR payments
+        
+        if (isSuccess) {
+            alert(`✅ QR Payment successful! $${total.toFixed(2)} has been processed.`);
+            
+            // Create order
+            const newOrder = {
+                id: Date.now(),
+                date: new Date().toISOString().split('T')[0],
+                total: total,
+                status: 'processing',
+                items: cart.length,
+                paymentMethod: 'qr'
+            };
+            
+            consumerOrders.unshift(newOrder);
+            
+            // Clear cart
+            cart = [];
+            updateCartBadge();
+            
+            // Switch to orders section
+            switchSection('ordersSection');
+        } else {
+            alert('❌ QR Payment failed. Please try again or use another payment method.');
+        }
+    }, 3000);
+}
+
+function loadFeedbackContent() {
+    // Populate order dropdown
+    const feedbackOrderSelect = document.getElementById('feedbackOrder');
+    feedbackOrderSelect.innerHTML = '<option value="">Select Order</option>' +
+        consumerOrders.map(order => 
+            `<option value="${order.id}">Order #${order.id} - $${order.total} - ${order.date}</option>`
+        ).join('');
+    
+    // Setup star rating
+    const stars = document.querySelectorAll('.star');
+    stars.forEach(star => {
+        star.addEventListener('click', function() {
+            const rating = parseInt(this.getAttribute('data-rating'));
+            document.getElementById('feedbackRating').value = rating;
+            
+            // Update star display
+            stars.forEach((s, index) => {
+                if (index < rating) {
+                    s.style.color = '#FFD700'; // Gold for selected stars
+                } else {
+                    s.style.color = '#ccc'; // Gray for unselected stars
+                }
+            });
+        });
+    });
+    
+    // Setup feedback form submission
+    const feedbackForm = document.getElementById('feedbackForm');
+    if (feedbackForm) {
+        feedbackForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            submitFeedback();
+        });
+    }
+    
+    // Load previous feedback
+    loadPreviousFeedback();
+}
+
+function submitFeedback() {
+    const orderId = document.getElementById('feedbackOrder').value;
+    const rating = document.getElementById('feedbackRating').value;
+    const category = document.getElementById('feedbackCategory').value;
+    const title = document.getElementById('feedbackTitle').value;
+    const message = document.getElementById('feedbackMessage').value;
+    const allowContact = document.getElementById('allowContact').checked;
+    
+    if (!rating || rating === '0') {
+        alert('Please provide a rating by clicking on the stars');
+        return;
+    }
+    
+    if (!category || !title || !message) {
+        alert('Please fill in all required fields');
+        return;
+    }
+    
+    // Create feedback object
+    const feedback = {
+        id: Date.now(),
+        date: new Date().toLocaleDateString(),
+        orderId: orderId || null,
+        rating: parseInt(rating),
+        category: category,
+        title: title,
+        message: message,
+        allowContact: allowContact,
+        status: 'submitted'
+    };
+    
+    // Save to localStorage (in real app, this would be sent to server)
+    let allFeedback = JSON.parse(localStorage.getItem('customerFeedback')) || [];
+    allFeedback.unshift(feedback);
+    localStorage.setItem('customerFeedback', JSON.stringify(allFeedback));
+    
+    // Show success message
+    alert('✅ Thank you for your feedback! We appreciate your input.');
+    
+    // Reset form
+    document.getElementById('feedbackForm').reset();
+    document.querySelectorAll('.star').forEach(star => {
+        star.style.color = '#ccc';
+    });
+    document.getElementById('feedbackRating').value = '0';
+    
+    // Reload previous feedback
+    loadPreviousFeedback();
+}
+
+function loadPreviousFeedback() {
+    const previousFeedback = document.getElementById('previousFeedback');
+    const allFeedback = JSON.parse(localStorage.getItem('customerFeedback')) || [];
+    
+    if (allFeedback.length === 0) {
+        previousFeedback.innerHTML = `
+            <p>No feedback submitted yet.</p>
+        `;
+        return;
+    }
+    
+    previousFeedback.innerHTML = allFeedback.map(feedback => `
+        <div class="feedback-item" style="border: 1px solid #e0e0e0; border-radius: 8px; padding: 1rem; margin-bottom: 1rem;">
+            <div style="display: flex; justify-content: between; align-items: center; margin-bottom: 0.5rem;">
+                <h4 style="margin: 0; flex: 1;">${feedback.title}</h4>
+                <span style="color: #666; font-size: 0.9rem;">${feedback.date}</span>
+            </div>
+            <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 0.5rem;">
+                <div class="rating-display">
+                    ${'⭐'.repeat(feedback.rating)}${'☆'.repeat(5 - feedback.rating)}
+                </div>
+                <span class="category-badge" style="background: #e3f2fd; color: #1976d2; padding: 0.2rem 0.5rem; border-radius: 12px; font-size: 0.8rem;">
+                    ${feedback.category.replace('-', ' ')}
+                </span>
+            </div>
+            <p style="margin: 0.5rem 0;">${feedback.message}</p>
+            ${feedback.orderId ? `<p style="color: #666; font-size: 0.9rem; margin: 0;">Order: #${feedback.orderId}</p>` : ''}
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 0.5rem;">
+                <span style="color: #4CAF50; font-size: 0.9rem;">
+                    ${feedback.status === 'submitted' ? '✅ Submitted' : '📝 Draft'}
+                </span>
+                ${feedback.allowContact ? '<span style="color: #666; font-size: 0.8rem;">📞 Contact allowed</span>' : ''}
+            </div>
+        </div>
+    `).join('');
+}
+
+// Update the switchSection function to handle new sections
+function loadSectionContent(sectionId) {
+    switch(sectionId) {
+        case 'dashboardSection':
+            loadDashboardContent();
+            break;
+        case 'myProductsSection':
+            loadMyProductsContent();
+            break;
+        case 'ordersSection':
+            loadOrdersContent();
+            break;
+        case 'marketplaceSection':
+            loadMarketplaceContent();
+            break;
+        case 'cartSection':
+            loadCartContent();
+            break;
+        case 'favoritesSection':
+            loadFavoritesContent();
+            break;
+        case 'paymentSection':
+            loadPaymentContent();
+            break;
+        case 'feedbackSection':
+            loadFeedbackContent();
+            break;
+        case 'blogSection':
+            loadBlogContent();
+            break;
+    }
+}
+
+    function switchSection(sectionId) {
+        // Hide all sections
+        contentSections.forEach(section => {
+            section.classList.add('hidden');
+        });
+        
+        // Show selected section
+        document.getElementById(sectionId).classList.remove('hidden');
+        
+        // Update active nav button
+        const navButtons = document.querySelectorAll('.nav-btn');
+        navButtons.forEach(btn => {
+            btn.classList.remove('active');
+        });
+        
+        // Find and activate the clicked button
+        navButtons.forEach(btn => {
+            if (btn.onclick && btn.onclick.toString().includes(sectionId)) {
+                btn.classList.add('active');
+            }
+        });
+        
+        // Load section-specific content
+        loadSectionContent(sectionId);
+    }
+
+    function loadSectionContent(sectionId) {
+        switch(sectionId) {
+            case 'dashboardSection':
+                loadDashboardContent();
+                break;
+            case 'myProductsSection':
+                loadMyProductsContent();
+                break;
+            case 'ordersSection':
+                loadOrdersContent();
+                break;
+            case 'marketplaceSection':
+                loadMarketplaceContent();
+                break;
+            case 'cartSection':
+                loadCartContent();
+                break;
+            case 'favoritesSection':
+                loadFavoritesContent();
+                break;
+            case 'blogSection':
+                loadBlogContent();
+                break;
+        }
+    }
+
+    function loadDashboardContent() {
+        // Update recent activity
+        const recentActivity = document.getElementById('recentActivity');
+        
+        if (currentRole === 'farmer') {
+            recentActivity.innerHTML = `
+                <div class="form-container">
+                    <h3>Recent Farm Activity</h3>
+                    <p><i class="fas fa-check-circle" style="color: #4CAF50;"></i> 3 new orders received today</p>
+                    <p><i class="fas fa-comment"></i> New review from "Fresh Market"</p>
+                    <p><i class="fas fa-truck"></i> Order #1042 shipped to customer</p>
+                    <p><i class="fas fa-money-bill-wave"></i> Payment received for last week's orders</p>
+                </div>
+            `;
+        } else {
+            recentActivity.innerHTML = `
+                <div class="form-container">
+                    <h3>Recent Shopping Activity</h3>
+                    <p><i class="fas fa-shipping-fast"></i> Order #1003 is on its way</p>
+                    <p><i class="fas fa-check-circle" style="color: #4CAF50;"></i> Order #1002 delivered yesterday</p>
+                    <p><i class="fas fa-star"></i> You rated "Organic Tomatoes" 5 stars</p>
+                    <p><i class="fas fa-heart"></i> Added "Farm Honey" to your favorites</p>
+                </div>
+            `;
+        }
+    }
+
+    // Update the product form to include image upload
+    function enhanceProductForm() {
+        const addProductForm = document.getElementById('addProductForm');
+        if (addProductForm) {
+            // Add image upload field if it doesn't exist
+            if (!document.getElementById('productImage')) {
+                const imageUploadGroup = document.createElement('div');
+                imageUploadGroup.className = 'form-group';
+                imageUploadGroup.innerHTML = `
+                    <label for="productImage">Product Image</label>
+                    <input type="file" id="productImage" class="form-control" accept="image/*">
+                    <small style="color: #666;">Upload an image for your product (optional)</small>
+                `;
+                
+                // Insert before the submit button
+                const submitButton = addProductForm.querySelector('button[type="submit"]');
+                addProductForm.insertBefore(imageUploadGroup, submitButton);
+            }
+        }
+    }
+
+    function loadMyProductsContent() {
+        enhanceProductForm();
+        
+        const myProductsGrid = document.getElementById('myProductsGrid');
+        
+        if (farmerProducts.length === 0) {
+            myProductsGrid.innerHTML = `
+                <div class="form-container">
+                    <p>No products found. Add your first product!</p>
+                </div>
+            `;
+            return;
+        }
+        
+        myProductsGrid.innerHTML = farmerProducts.map(product => `
+            <div class="product-card">
+                <div class="product-image">
+                    ${product.image}
+                    <div class="product-badge">Available</div>
+                </div>
+                <div class="product-info">
+                    <div class="product-name">${product.name}</div>
+                    <div class="product-price">$${product.price}/${product.unit}</div>
+                    <div class="product-description">${product.description}</div>
+                    <p><strong>Stock:</strong> ${product.quantity} ${product.unit}</p>
+                    <div class="product-actions">
+                        <button class="btn btn-primary" onclick="editProduct(${product.id})">Edit</button>
+                        <button class="btn btn-danger" onclick="deleteProduct(${product.id})">Delete</button>
+                    </div>
+                </div>
+            </div>
+        `).join('');
+        
+        // Add event listener to add product form
+        const addProductForm = document.getElementById('addProductForm');
+        if (addProductForm) {
+            addProductForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                addNewProduct();
+            });
+        }
+    }
+
+    // Enhanced addNewProduct function with image upload
+    function addNewProduct() {
+        const productName = document.getElementById('productName').value;
+        const productCategory = document.getElementById('productCategory').value;
+        const productDescription = document.getElementById('productDescription').value;
+        const productPrice = document.getElementById('productPrice').value;
+        const productQuantity = document.getElementById('productQuantity').value;
+        const productImageInput = document.getElementById('productImage');
+        
+        // Handle image upload
+        let productImage = '🌱'; // Default icon
+        if (productImageInput.files && productImageInput.files[0]) {
+            const file = productImageInput.files[0];
+            const reader = new FileReader();
+            
+            reader.onload = function(e) {
+                productImage = `<img src="${e.target.result}" alt="${productName}" style="width: 100%; height: 100%; object-fit: cover;">`;
+                
+                // Add the product to the array
+                const newProduct = {
+                    id: Date.now(), // Simple ID generation
+                    name: productName,
+                    category: productCategory,
+                    price: parseFloat(productPrice),
+                    unit: 'unit',
+                    quantity: parseInt(productQuantity),
+                    description: productDescription,
+                    image: productImage
+                };
+                
+                farmerProducts.push(newProduct);
+                
+                // Update UI
+                loadMyProductsContent();
+                updateStats();
+                
+                // Reset form
+                document.getElementById('addProductForm').reset();
+                alert(`Product "${productName}" added successfully!`);
+            };
+            
+            reader.readAsDataURL(file);
+        } else {
+            // No image selected, use default
+            const newProduct = {
+                id: Date.now(),
+                name: productName,
+                category: productCategory,
+                price: parseFloat(productPrice),
+                unit: 'unit',
+                quantity: parseInt(productQuantity),
+                description: productDescription,
+                image: productImage
+            };
+            
+            farmerProducts.push(newProduct);
+            loadMyProductsContent();
+            updateStats();
+            document.getElementById('addProductForm').reset();
+            alert(`Product "${productName}" added successfully!`);
+        }
+    }
+
+    function editProduct(productId) {
+        const product = farmerProducts.find(p => p.id === productId);
+        if (product) {
+            // Create edit form modal
+            const editModal = document.createElement('div');
+            editModal.style.cssText = `
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: rgba(0,0,0,0.5);
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                z-index: 1000;
+            `;
+            
+            editModal.innerHTML = `
+                <div style="background: white; padding: 2rem; border-radius: 10px; width: 90%; max-width: 500px;">
+                    <h3>Edit Product</h3>
+                    <form id="editProductForm">
+                        <div class="form-group">
+                            <label for="editProductName">Product Name</label>
+                            <input type="text" id="editProductName" class="form-control" value="${product.name}" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="editProductCategory">Category</label>
+                            <select id="editProductCategory" class="form-control" required>
+                                <option value="vegetables" ${product.category === 'vegetables' ? 'selected' : ''}>Vegetables</option>
+                                <option value="fruits" ${product.category === 'fruits' ? 'selected' : ''}>Fruits</option>
+                                <option value="grains" ${product.category === 'grains' ? 'selected' : ''}>Grains</option>
+                                <option value="dairy" ${product.category === 'dairy' ? 'selected' : ''}>Dairy</option>
+                                <option value="other" ${product.category === 'other' ? 'selected' : ''}>Other</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="editProductDescription">Description</label>
+                            <textarea id="editProductDescription" class="form-control" required>${product.description}</textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="editProductPrice">Price ($)</label>
+                            <input type="number" id="editProductPrice" class="form-control" value="${product.price}" step="0.01" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="editProductQuantity">Quantity</label>
+                            <input type="number" id="editProductQuantity" class="form-control" value="${product.quantity}" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="editProductImage">Update Image</label>
+                            <input type="file" id="editProductImage" class="form-control" accept="image/*">
+                        </div>
+                        <div style="display: flex; gap: 10px; margin-top: 1rem;">
+                            <button type="submit" class="btn btn-primary">Update Product</button>
+                            <button type="button" class="btn btn-secondary" onclick="this.closest('.edit-modal').remove()">Cancel</button>
+                        </div>
+                    </form>
+                </div>
+            `;
+            editModal.classList.add('edit-modal');
+            document.body.appendChild(editModal);
+            
+            // Handle form submission
+            document.getElementById('editProductForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                // Update product
+                product.name = document.getElementById('editProductName').value;
+                product.category = document.getElementById('editProductCategory').value;
+                product.description = document.getElementById('editProductDescription').value;
+                product.price = parseFloat(document.getElementById('editProductPrice').value);
+                product.quantity = parseInt(document.getElementById('editProductQuantity').value);
+                
+                // Handle image update
+                const imageInput = document.getElementById('editProductImage');
+                if (imageInput.files && imageInput.files[0]) {
+                    const file = imageInput.files[0];
+                    const reader = new FileReader();
+                    
+                    reader.onload = function(e) {
+                        product.image = `<img src="${e.target.result}" alt="${product.name}" style="width: 100%; height: 100%; object-fit: cover;">`;
+                        loadMyProductsContent();
+                        editModal.remove();
+                        alert('Product updated successfully!');
+                    };
+                    
+                    reader.readAsDataURL(file);
+                } else {
+                    loadMyProductsContent();
+                    editModal.remove();
+                    alert('Product updated successfully!');
+                }
+            });
+        }
+    }
+
+    function deleteProduct(productId) {
+        if (confirm('Are you sure you want to delete this product?')) {
+            const index = farmerProducts.findIndex(p => p.id === productId);
+            if (index !== -1) {
+                farmerProducts.splice(index, 1);
+                loadMyProductsContent();
+                updateStats();
+                alert('Product deleted successfully!');
+            }
+        }
+    }
+
+    // Enhanced order editing functionality
+    function editOrder(orderId) {
+        const order = farmerOrders.find(o => o.id === orderId);
+        if (order) {
+            const editModal = document.createElement('div');
+            editModal.style.cssText = `
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: rgba(0,0,0,0.5);
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                z-index: 1000;
+            `;
+            
+            editModal.innerHTML = `
+                <div style="background: white; padding: 2rem; border-radius: 10px; width: 90%; max-width: 500px;">
+                    <h3>Edit Order #${order.id}</h3>
+                    <form id="editOrderForm">
+                        <div class="form-group">
+                            <label for="editOrderCustomer">Customer</label>
+                            <input type="text" id="editOrderCustomer" class="form-control" value="${order.customer}" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="editOrderDate">Date</label>
+                            <input type="date" id="editOrderDate" class="form-control" value="${order.date}" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="editOrderAmount">Amount ($)</label>
+                            <input type="number" id="editOrderAmount" class="form-control" value="${order.amount}" step="0.01" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="editOrderItems">Items</label>
+                            <input type="number" id="editOrderItems" class="form-control" value="${order.items}" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="editOrderStatus">Status</label>
+                            <select id="editOrderStatus" class="form-control" required>
+                                <option value="processing" ${order.status === 'processing' ? 'selected' : ''}>Processing</option>
+                                <option value="shipped" ${order.status === 'shipped' ? 'selected' : ''}>Shipped</option>
+                                <option value="delivered" ${order.status === 'delivered' ? 'selected' : ''}>Delivered</option>
+                                <option value="cancelled" ${order.status === 'cancelled' ? 'selected' : ''}>Cancelled</option>
+                            </select>
+                        </div>
+                        <div style="display: flex; gap: 10px; margin-top: 1rem;">
+                            <button type="submit" class="btn btn-primary">Update Order</button>
+                            <button type="button" class="btn btn-secondary" onclick="this.closest('.order-modal').remove()">Cancel</button>
+                        </div>
+                    </form>
+                </div>
+            `;
+            editModal.classList.add('order-modal');
+            document.body.appendChild(editModal);
+            
+            document.getElementById('editOrderForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                // Update order
+                order.customer = document.getElementById('editOrderCustomer').value;
+                order.date = document.getElementById('editOrderDate').value;
+                order.amount = parseFloat(document.getElementById('editOrderAmount').value);
+                order.items = parseInt(document.getElementById('editOrderItems').value);
+                order.status = document.getElementById('editOrderStatus').value;
+                
+                loadOrdersContent();
+                editModal.remove();
+                alert('Order updated successfully!');
+            });
+        }
+    }
+
+    function loadOrdersContent() {
+        const ordersList = document.getElementById('ordersList');
+        
+        if (currentRole === 'farmer') {
+            if (farmerOrders.length === 0) {
+                ordersList.innerHTML = `
+                    <div class="form-container">
+                        <p>No orders yet</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            ordersList.innerHTML = `
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Order ID</th>
+                                <th>Customer</th>
+                                <th>Date</th>
+                                <th>Amount</th>
+                                <th>Items</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${farmerOrders.map(order => `
+                                <tr>
+                                    <td>#${order.id}</td>
+                                    <td>${order.customer}</td>
+                                    <td>${order.date}</td>
+                                    <td>$${order.amount}</td>
+                                    <td>${order.items}</td>
+                                    <td>
+                                        <span class="status-badge status-${order.status}">
+                                            ${order.status.charAt(0).toUpperCase() + order.status.slice(1)}
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <button class="btn btn-primary" onclick="editOrder(${order.id})">Edit</button>
+                                        <button class="btn btn-secondary" onclick="updateOrderStatus(${order.id})">Update Status</button>
+                                    </td>
+                                </tr>
+                            `).join('')}
+                        </tbody>
+                    </table>
+                </div>
+            `;
+        } else {
+            if (consumerOrders.length === 0) {
+                ordersList.innerHTML = `
+                    <div class="form-container">
+                        <p>No orders yet</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            ordersList.innerHTML = `
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Order ID</th>
+                                <th>Date</th>
+                                <th>Total</th>
+                                <th>Items</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${consumerOrders.map(order => `
+                                <tr>
+                                    <td>#${order.id}</td>
+                                    <td>${order.date}</td>
+                                    <td>$${order.total}</td>
+                                    <td>${order.items}</td>
+                                    <td>
+                                        <span class="status-badge status-${order.status}">
+                                            ${order.status.charAt(0).toUpperCase() + order.status.slice(1)}
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <button class="btn btn-primary" onclick="trackOrder(${order.id})">Track</button>
+                                    </td>
+                                </tr>
+                            `).join('')}
+                        </tbody>
+                    </table>
+                </div>
+            `;
+        }
+    }
+
+    function updateOrderStatus(orderId) {
+        const order = farmerOrders.find(o => o.id === orderId);
+        if (order) {
+            const newStatus = prompt(`Update status for order #${orderId}:\n(processing, shipped, delivered, cancelled)`, order.status);
+            
+            if (newStatus && ['processing', 'shipped', 'delivered', 'cancelled'].includes(newStatus.toLowerCase())) {
+                order.status = newStatus.toLowerCase();
+                loadOrdersContent();
+                alert(`Order #${orderId} status updated to ${newStatus}`);
+            } else if (newStatus) {
+                alert('Invalid status. Please use: processing, shipped, delivered, or cancelled');
+            }
+        }
+    }
+
+    // Enhanced order tracking function
+    function trackOrder(orderId) {
+        const order = consumerOrders.find(o => o.id === orderId);
+        if (order) {
+            const trackingModal = document.createElement('div');
+            trackingModal.style.cssText = `
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: rgba(0,0,0,0.5);
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                z-index: 1000;
+            `;
+            
+            // Determine tracking steps based on status
+            const steps = [
+                { name: 'Order Placed', status: 'completed' },
+                { name: 'Processing', status: order.status !== 'processing' ? 'completed' : 'current' },
+                { name: 'Shipped', status: order.status === 'shipped' || order.status === 'delivered' ? 'completed' : 
+                                          order.status === 'processing' ? 'pending' : 'current' },
+                { name: 'Delivered', status: order.status === 'delivered' ? 'completed' : 'pending' }
+            ];
+            
+            trackingModal.innerHTML = `
+                <div style="background: white; padding: 2rem; border-radius: 10px; width: 90%; max-width: 500px;">
+                    <h3>Tracking Order #${order.id}</h3>
+                    <p><strong>Order Date:</strong> ${order.date}</p>
+                    <p><strong>Total Amount:</strong> $${order.total}</p>
+                    <p><strong>Current Status:</strong> <span class="status-badge status-${order.status}">${order.status.charAt(0).toUpperCase() + order.status.slice(1)}</span></p>
+                    
+                    <div style="margin: 1.5rem 0;">
+                        <h4>Order Tracking</h4>
+                        <div class="tracking-steps">
+                            ${steps.map((step, index) => `
+                                <div class="tracking-step ${step.status}" style="display: flex; align-items: center; margin: 1rem 0;">
+                                    <div class="step-icon" style="width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-right: 1rem;
+                                        ${step.status === 'completed' ? 'background: #4CAF50; color: white;' : 
+                                          step.status === 'current' ? 'background: #2196F3; color: white;' : 
+                                          'background: #e0e0e0; color: #666;'}">
+                                        ${step.status === 'completed' ? '✓' : index + 1}
+                                    </div>
+                                    <div>
+                                        <div style="font-weight: bold;">${step.name}</div>
+                                        <div style="font-size: 0.8rem; color: #666;">
+                                            ${step.status === 'completed' ? 'Completed' : 
+                                             step.status === 'current' ? 'In Progress' : 'Pending'}
+                                        </div>
+                                    </div>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+                    
+                    <div style="text-align: center; margin-top: 1.5rem;">
+                        <button class="btn btn-primary" onclick="this.closest('.tracking-modal').remove()">Close</button>
+                    </div>
+                </div>
+            `;
+            trackingModal.classList.add('tracking-modal');
+            document.body.appendChild(trackingModal);
+        } else {
+            alert('Order not found!');
+        }
+    }
+
+    function loadMarketplaceContent() {
+        const marketplaceGrid = document.getElementById('marketplaceGrid');
+        
+        marketplaceGrid.innerHTML = consumerProducts.map(product => `
+            <div class="product-card">
+                <div class="product-image">
+                    <span style="font-size: 40px;">${product.image}</span>
+                    <div class="product-badge">${product.rating} ★</div>
+                </div>
+                <div class="product-info">
+                    <div class="product-name">${product.name}</div>
+                    <div class="product-farmer">${product.farmer}</div>
+                    <div class="product-price">$${product.price}/${product.unit}</div>
+                    <div class="product-description">${product.description}</div>
+                    <div class="product-actions">
+                        <button class="btn btn-primary" onclick="addToCart(${product.id})">Add to Cart</button>
+                        <button class="btn btn-secondary" onclick="addToFavorites(${product.id})">Favorite</button>
+                    </div>
+                </div>
+            </div>
+        `).join('');
+    }
+
+    // Enhanced consumer functions
+    function addToCart(productId) {
+        const product = consumerProducts.find(p => p.id === productId);
+        if (product) {
+            // Check if product already in cart
+            const existingItem = cart.find(item => item.id === productId);
+            
+            if (existingItem) {
+                existingItem.quantity += 1;
+            } else {
+                cart.push({
+                    ...product,
+                    quantity: 1,
+                    cartId: Date.now() // Unique ID for cart item
+                });
+            }
+            
+            // Update cart badge if exists
+            updateCartBadge();
+            alert(`${product.name} added to cart!`);
+        }
+    }
+
+    function addToFavorites(productId) {
+        const product = consumerProducts.find(p => p.id === productId);
+        if (product) {
+            // Check if product already in favorites
+            const existingFavorite = favorites.find(item => item.id === productId);
+            
+            if (!existingFavorite) {
+                favorites.push(product);
+                alert(`${product.name} added to favorites!`);
+            } else {
+                alert(`${product.name} is already in your favorites!`);
+            }
+        }
+    }
+
+    // Enhanced cart content loading
+    function loadCartContent() {
+        const cartItems = document.getElementById('cartItems');
+        
+        if (cart.length === 0) {
+            cartItems.innerHTML = `
+                <div class="form-container">
+                    <h3>Shopping Cart</h3>
+                    <p>Your cart is empty. Browse the marketplace to add items.</p>
+                    <button class="btn btn-primary" onclick="switchSection('marketplaceSection')">Browse Marketplace</button>
+                </div>
+            `;
+            return;
+        }
+        
+        // Calculate total
+        const total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+        
+        cartItems.innerHTML = `
+            <div class="form-container">
+                <h3>Shopping Cart (${cart.length} items)</h3>
+                <div class="cart-items">
+                    ${cart.map(item => `
+                        <div class="cart-item" style="display: flex; justify-content: space-between; align-items: center; padding: 1rem; border-bottom: 1px solid #eee;">
+                            <div style="display: flex; align-items: center; gap: 1rem;">
+                                <div style="width: 60px; height: 60px; background: #f5f5f5; border-radius: 8px; display: flex; align-items: center; justify-content: center;">
+                                    ${item.image}
+                                </div>
+                                <div>
+                                    <div style="font-weight: bold;">${item.name}</div>
+                                    <div style="color: #666; font-size: 0.9rem;">${item.farmer}</div>
+                                    <div style="color: #4CAF50; font-weight: bold;">$${item.price}/${item.unit}</div>
+                                </div>
+                            </div>
+                            <div style="display: flex; align-items: center; gap: 1rem;">
+                                <div style="display: flex; align-items: center; gap: 0.5rem;">
+                                    <button class="btn btn-secondary" onclick="updateCartQuantity(${item.cartId}, -1)" style="padding: 5px 10px;">-</button>
+                                    <span style="min-width: 30px; text-align: center;">${item.quantity}</span>
+                                    <button class="btn btn-secondary" onclick="updateCartQuantity(${item.cartId}, 1)" style="padding: 5px 10px;">+</button>
+                                </div>
+                                <div style="font-weight: bold;">$${(item.price * item.quantity).toFixed(2)}</div>
+                                <button class="btn btn-danger" onclick="removeFromCart(${item.cartId})" style="padding: 5px 10px;">Remove</button>
+                            </div>
+                        </div>
+                    `).join('')}
+                </div>
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 1.5rem; padding-top: 1rem; border-top: 2px solid #eee;">
+                    <h4>Total: $${total.toFixed(2)}</h4>
+                    // In the loadCartContent function, replace the checkout button line:
+
+
+
+                    <button class="btn btn-primary" onclick="switchSection('paymentSection')">Proceed to Checkout</button>
+                </div>
+            </div>
+        `;
+    }
+
+    // Cart utility functions
+    function updateCartQuantity(cartId, change) {
+        const item = cart.find(item => item.cartId === cartId);
+        if (item) {
+            item.quantity += change;
+            
+            // Remove if quantity becomes 0 or less
+            if (item.quantity <= 0) {
+                removeFromCart(cartId);
+            } else {
+                loadCartContent();
+            }
+        }
+    }
+
+    function removeFromCart(cartId) {
+        cart = cart.filter(item => item.cartId !== cartId);
+        updateCartBadge();
+        loadCartContent();
+    }
+
+    function checkout() {
+        if (cart.length === 0) {
+            alert('Your cart is empty!');
+            return;
+        }
+        
+        const total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+        
+        // Create a new order
+        const newOrder = {
+            id: Date.now(),
+            date: new Date().toISOString().split('T')[0],
+            total: total,
+            status: 'processing',
+            items: cart.length
+        };
+        
+        consumerOrders.unshift(newOrder);
+        
+        // Clear cart
+        cart = [];
+        updateCartBadge();
+        
+        // Show success message and switch to orders
+        alert(`Order placed successfully! Total: $${total.toFixed(2)}`);
+        switchSection('ordersSection');
+    }
+
+    function updateCartBadge() {
+        // Update cart badge in navigation if it exists
+        const cartBtn = document.querySelector('.nav-btn[onclick="switchSection(\'cartSection\')"]');
+        if (cartBtn) {
+            const existingBadge = cartBtn.querySelector('.cart-badge');
+            if (existingBadge) {
+                existingBadge.textContent = cart.length;
+            } else if (cart.length > 0) {
+                const badge = document.createElement('span');
+                badge.className = 'cart-badge';
+                badge.style.cssText = `
+                    background: #e74c3c;
+                    color: white;
+                    border-radius: 50%;
+                    width: 20px;
+                    height: 20px;
+                    display: inline-flex;
+                    align-items: center;
+                    justify-content: center;
+                    font-size: 0.7rem;
+                    margin-left: 5px;
+                `;
+                badge.textContent = cart.length;
+                cartBtn.appendChild(badge);
+            }
+        }
+    }
+
+    // Favorites section functions
+    function loadFavoritesContent() {
+        const favoritesGrid = document.getElementById('favoritesGrid');
+        
+        if (favorites.length === 0) {
+            favoritesGrid.innerHTML = `
+                <div class="form-container">
+                    <p>No favorites yet. Browse the marketplace and add products to your favorites!</p>
+                    <button class="btn btn-primary" onclick="switchSection('marketplaceSection')">Browse Marketplace</button>
+                </div>
+            `;
+            return;
+        }
+        
+        favoritesGrid.innerHTML = favorites.map(product => `
+            <div class="product-card">
+                <div class="product-image">
+                    ${product.image}
+                    <div class="product-badge">${product.rating} ★</div>
+                </div>
+                <div class="product-info">
+                    <div class="product-name">${product.name}</div>
+                    <div class="product-farmer">${product.farmer}</div>
+                    <div class="product-price">$${product.price}/${product.unit}</div>
+                    <div class="product-description">${product.description}</div>
+                    <div class="product-actions">
+                        <button class="btn btn-primary" onclick="addToCart(${product.id})">Add to Cart</button>
+                        <button class="btn btn-danger" onclick="removeFromFavorites(${product.id})">Remove</button>
+                    </div>
+                </div>
+            </div>
+        `).join('');
+    }
+
+    function removeFromFavorites(productId) {
+        favorites = favorites.filter(item => item.id !== productId);
+        loadFavoritesContent();
+        alert('Product removed from favorites!');
+    }
+
+    function loadBlogContent() {
+        // Blog content is already static in the HTML
+    }
+
+    function updateStats() {
+        if (currentRole === 'farmer') {
+            document.getElementById('totalProducts').textContent = farmerProducts.length;
+            document.getElementById('totalOrders').textContent = farmerOrders.length;
+            document.getElementById('totalRevenue').textContent = `$${farmerOrders.reduce((sum, order) => sum + order.amount, 0)}`;
+        } else {
+            document.getElementById('totalProducts').textContent = consumerProducts.length;
+            document.getElementById('totalOrders').textContent = consumerOrders.length;
+            document.getElementById('totalRevenue').textContent = `$${consumerOrders.reduce((sum, order) => sum + order.total, 0)}`;
+        }
+    }
+
+    function activateVoiceAssistant() {
+        const voiceBtn = voiceAssistantBtn;
+        voiceBtn.classList.add('listening');
+        
+        // Simulate voice command processing
+        setTimeout(() => {
+            voiceBtn.classList.remove('listening');
+            
+            let commandResult = '';
+            if (currentRole === 'farmer') {
+                commandResult = 'Showing your products and recent orders.';
+                switchSection('myProductsSection');
+            } else {
+                commandResult = 'Showing marketplace with fresh products.';
+                switchSection('marketplaceSection');
+            }
+            
+            alert(`Voice Assistant: ${commandResult}`);
+        }, 2000);
+    }
+</script>

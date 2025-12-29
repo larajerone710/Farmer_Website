@@ -1,0 +1,565 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Direct Farm Market - Login</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #2d5a27;
+            --primary-light: #3a7a32;
+            --secondary: #ff9800;
+            --light: #f8f9fa;
+            --dark: #333;
+            --gray: #6c757d;
+            --white: #ffffff;
+            --success: #4CAF50;
+            --farm-green: #4CAF50;
+            --farm-orange: #FF9800;
+            --farm-yellow: #FFC107;
+            --farm-blue: #2196F3;
+            --farm-purple: #9C27B0;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #4CAF50 0%, #2196F3 50%, #FF9800 100%);
+            background-size: 400% 400%;
+            animation: gradientShift 15s ease infinite;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            position: relative;
+            overflow-y: auto;
+        }
+
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* Floating elements */
+        .floating-element {
+            position: absolute;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.2);
+            animation: float 15s infinite linear;
+            z-index: 0;
+        }
+
+        .floating-element:nth-child(1) {
+            width: 100px;
+            height: 100px;
+            top: 10%;
+            left: 10%;
+            animation-delay: 0s;
+        }
+
+        .floating-element:nth-child(2) {
+            width: 150px;
+            height: 150px;
+            top: 70%;
+            left: 80%;
+            animation-delay: -5s;
+        }
+
+        .floating-element:nth-child(3) {
+            width: 80px;
+            height: 80px;
+            top: 20%;
+            left: 85%;
+            animation-delay: -10s;
+        }
+
+        .floating-element:nth-child(4) {
+            width: 120px;
+            height: 120px;
+            top: 80%;
+            left: 15%;
+            animation-delay: -7s;
+        }
+
+        @keyframes float {
+            0% { transform: translate(0, 0) rotate(0deg); }
+            25% { transform: translate(100px, 50px) rotate(90deg); }
+            50% { transform: translate(50px, 100px) rotate(180deg); }
+            75% { transform: translate(-50px, 50px) rotate(270deg); }
+            100% { transform: translate(0, 0) rotate(360deg); }
+        }
+
+        .container {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            overflow-y: auto;
+            width: 100%;
+            max-width: 400px;
+            position: relative;
+            z-index: 1;
+            transform: scale(0.95);
+            opacity: 0;
+            animation: popIn 0.8s ease forwards;
+        }
+
+        @keyframes popIn {
+            0% { transform: scale(0.95); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        .header {
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+            color: white;
+            padding: 30px 20px;
+            text-align: center;
+            position: relative;
+            overflow-y: auto;
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(255,255,255,0.1), transparent);
+            animation: shine 3s infinite linear;
+        }
+
+        @keyframes shine {
+            0% { transform: translateX(-100%) translateY(-100%) rotate(0deg); }
+            100% { transform: translateX(100%) translateY(100%) rotate(360deg); }
+        }
+
+        .header h1 {
+            font-size: 2.2em;
+            margin-bottom: 10px;
+            font-weight: 600;
+            position: relative;
+            z-index: 1;
+        }
+
+        .header p {
+            opacity: 0.9;
+            font-size: 1.1em;
+            position: relative;
+            z-index: 1;
+        }
+
+        .form-container {
+            padding: 30px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+            position: relative;
+            transform: translateY(20px);
+            opacity: 0;
+            animation: slideUp 0.5s ease forwards;
+        }
+
+        @keyframes slideUp {
+            0% { transform: translateY(20px); opacity: 0; }
+            100% { transform: translateY(0); opacity: 1; }
+        }
+
+        .form-group:nth-child(1) { animation-delay: 0.2s; }
+        .form-group:nth-child(2) { animation-delay: 0.4s; }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: var(--dark);
+        }
+
+        input, select {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e1e1e1;
+            border-radius: 10px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+
+        input:focus, select:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(45, 90, 39, 0.1);
+            transform: scale(1.02);
+        }
+
+        .btn {
+            width: 100%;
+            padding: 12px;
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow-y: auto;
+            transform: translateY(20px);
+            opacity: 0;
+            animation: slideUp 0.5s ease forwards;
+            animation-delay: 0.6s;
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(45, 90, 39, 0.3);
+        }
+
+        .btn:hover::before {
+            left: 100%;
+        }
+
+        .btn:active {
+            transform: translateY(-1px);
+        }
+
+        .switch-form {
+            text-align: center;
+            margin-top: 20px;
+            color: var(--gray);
+            transform: translateY(20px);
+            opacity: 0;
+            animation: slideUp 0.5s ease forwards;
+            animation-delay: 0.8s;
+        }
+
+        .switch-form a {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 500;
+            position: relative;
+        }
+
+        .switch-form a::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--primary);
+            transition: width 0.3s ease;
+        }
+
+        .switch-form a:hover::after {
+            width: 100%;
+        }
+
+        .language-selector {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            z-index: 2;
+            transform: translateY(-20px);
+            opacity: 0;
+            animation: slideDown 0.5s ease forwards;
+            animation-delay: 0.5s;
+        }
+
+        @keyframes slideDown {
+            0% { transform: translateY(-20px); opacity: 0; }
+            100% { transform: translateY(0); opacity: 1; }
+        }
+
+        .language-selector select {
+            background: white;
+            border: 2px solid #e1e1e1;
+            border-radius: 8px;
+            padding: 8px 12px;
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+
+        .language-selector select:focus {
+            border-color: var(--primary);
+        }
+
+        .demo-accounts {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 15px;
+            margin-top: 20px;
+            border-left: 4px solid var(--secondary);
+            transform: translateY(20px);
+            opacity: 0;
+            animation: slideUp 0.5s ease forwards;
+            animation-delay: 1s;
+        }
+
+        .demo-accounts h4 {
+            color: var(--primary);
+            margin-bottom: 10px;
+        }
+
+        .demo-account {
+            background: white;
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 1px solid #e1e1e1;
+        }
+
+        .demo-account:hover {
+            border-color: var(--primary);
+            transform: translateX(5px);
+        }
+
+        .demo-account:last-child {
+            margin-bottom: 0;
+        }
+
+        .voice-login {
+            margin-top: 20px;
+            text-align: center;
+            transform: translateY(20px);
+            opacity: 0;
+            animation: slideUp 0.5s ease forwards;
+            animation-delay: 1.2s;
+        }
+
+        .voice-btn {
+            background: var(--farm-blue);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 60px;
+            height: 60px;
+            font-size: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(33, 150, 243, 0.4);
+        }
+
+        .voice-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 8px 20px rgba(33, 150, 243, 0.6);
+        }
+
+        .voice-btn.listening {
+            animation: pulse 1.5s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+    </style>
+</head>
+<body>
+    <!-- Floating background elements -->
+    <div class="floating-element"></div>
+    <div class="floating-element"></div>
+    <div class="floating-element"></div>
+    <div class="floating-element"></div>
+
+    <div class="language-selector">
+        <select id="languageSelect">
+            <option value="en">English</option>
+            <option value="ta">தமிழ்</option>
+        </select>
+    </div>
+
+    <div class="container">
+        <div class="header">
+            <h1 id="welcomeText">🌱 Direct Farm Market</h1>
+            <p id="subtitleText">Farm to Table, Direct to You</p>
+        </div>
+
+        <div class="form-container">
+            <!-- Login Form -->
+            <form id="loginForm">
+                <div class="form-group">
+                    <label for="loginUsername" id="loginUsernameLabel">Username</label>
+                    <input type="text" id="loginUsername" required>
+                </div>
+                <div class="form-group">
+                    <label for="loginPassword" id="loginPasswordLabel">Password</label>
+                    <input type="password" id="loginPassword" required>
+                </div>
+                <button type="submit" class="btn" id="loginButton">
+                    <i class="fas fa-sign-in-alt"></i> <span id="loginButtonText">Login</span>
+                </button>
+                
+                <div class="demo-accounts">
+                    <h4>Demo Accounts:</h4>
+                    <div class="demo-account" data-username="john" data-password="password123">
+                        <strong>Farmer Account:</strong> john / password123
+                    </div>
+                    <div class="demo-account" data-username="sarah" data-password="password123">
+                        <strong>Consumer Account:</strong> sarah / password123
+                    </div>
+                </div>
+                
+                <div class="voice-login">
+                    <button type="button" class="voice-btn" id="voiceLoginBtn" title="Voice Login">
+                        <i class="fas fa-microphone"></i>
+                    </button>
+                    <p style="margin-top: 10px; font-size: 14px; color: var(--gray);">Voice Login</p>
+                </div>
+                
+                <div class="switch-form">
+                    <span id="noAccountText">Don't have an account?</span>
+                    <a href="register.html" id="showRegisterLink">Register</a>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Language management
+        let currentLanguage = 'en';
+        let translations = {
+            en: {
+                welcome: "🌱 Direct Farm Market",
+                subtitle: "Farm to Table, Direct to You",
+                username: "Username",
+                password: "Password",
+                login: "Login",
+                no_account: "Don't have an account?",
+                register: "Register"
+            },
+            ta: {
+                welcome: "🌱 நேரடி பண்ணை சந்தை",
+                subtitle: "பண்ணையில் இருந்து மேசைக்கு, நேரடியாக உங்களுக்கு",
+                username: "பயனர்பெயர்",
+                password: "கடவுச்சொல்",
+                login: "உள்நுழைக",
+                no_account: "கணக்கு இல்லையா?",
+                register: "பதிவு செய்க"
+            }
+        };
+
+        // Load language translations
+        function loadLanguage(lang) {
+            currentLanguage = lang;
+            updateUIText();
+        }
+
+        // Update UI text with translations
+        function updateUIText() {
+            document.getElementById('welcomeText').textContent = translations[currentLanguage].welcome;
+            document.getElementById('subtitleText').textContent = translations[currentLanguage].subtitle;
+            
+            // Login form
+            document.getElementById('loginUsernameLabel').textContent = translations[currentLanguage].username;
+            document.getElementById('loginPasswordLabel').textContent = translations[currentLanguage].password;
+            document.getElementById('loginButtonText').textContent = translations[currentLanguage].login;
+            document.getElementById('noAccountText').textContent = translations[currentLanguage].no_account;
+            document.getElementById('showRegisterLink').textContent = translations[currentLanguage].register;
+        }
+
+        // Language selector event
+        document.getElementById('languageSelect').addEventListener('change', (e) => {
+            currentLanguage = e.target.value;
+            loadLanguage(currentLanguage);
+        });
+
+        // Demo account click handlers
+        document.querySelectorAll('.demo-account').forEach(account => {
+            account.addEventListener('click', function() {
+                const username = this.getAttribute('data-username');
+                const password = this.getAttribute('data-password');
+                document.getElementById('loginUsername').value = username;
+                document.getElementById('loginPassword').value = password;
+            });
+        });
+
+        // Voice login
+        document.getElementById('voiceLoginBtn').addEventListener('click', function() {
+            const voiceBtn = this;
+            voiceBtn.classList.add('listening');
+            
+            // Simulate voice recognition
+            setTimeout(() => {
+                voiceBtn.classList.remove('listening');
+                
+                // For demo purposes, auto-fill with farmer credentials
+                document.getElementById('loginUsername').value = 'john';
+                document.getElementById('loginPassword').value = 'password123';
+                
+                // Show success message
+                alert('Voice login successful! Farmer account loaded.');
+            }, 2000);
+        });
+
+        // Login form submission
+        document.getElementById('loginForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const username = document.getElementById('loginUsername').value;
+            const password = document.getElementById('loginPassword').value;
+            const loginButton = document.getElementById('loginButton');
+            
+            // Show loading state
+            const originalText = loginButton.innerHTML;
+            loginButton.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Logging in...';
+            loginButton.disabled = true;
+            
+            try {
+                // Simulate API call
+                setTimeout(() => {
+                    // Check credentials (in a real app, this would be done server-side)
+                    let userType = 'consumer';
+                    if (username === 'john' && password === 'password123') {
+                        userType = 'farmer';
+                    }
+                    
+                    // Store user data and redirect to dashboard
+                    localStorage.setItem('userData', JSON.stringify({
+                        userId: username,
+                        userType: userType,
+                        fullName: username === 'john' ? 'John Farmer' : 'Sarah Consumer',
+                        language: currentLanguage
+                    }));
+                    
+                    // Redirect based on user type
+                    window.location.href = `dashboard.html?userType=${userType}&language=${currentLanguage}`;
+                }, 1500);
+                
+            } catch (error) {
+                alert('Error during login. Please check if server is running.');
+                console.error('Login error:', error);
+                
+                // Reset button state
+                loginButton.innerHTML = originalText;
+                loginButton.disabled = false;
+            }
+        });
+
+        // Initialize
+        loadLanguage(currentLanguage);
+    </script>
+</body>
+</html>

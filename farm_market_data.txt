@@ -1,0 +1,5 @@
+USER|2|sarah|ef92b778bafe771e89245b89ecbc08a44a4e166c06659911881f383d4473e94f|Sarah Consumer|consumer|+91 9876543211|456 Market Road, Consumer Town
+USER|1|john|ef92b778bafe771e89245b89ecbc08a44a4e166c06659911881f383d4473e94f|John Farmer|farmer|+91 9876543210|123 Farm Street, Agricultural City
+PRODUCT|1|1|Organic Tomatoes|vegetables|Fresh organic tomatoes grown without pesticides|3.99|50|kg|1.50
+PRODUCT|2|1|Honeycrisp Apples|fruits|Sweet and crisp apples, perfect for eating fresh|4.50|75|kg|2.00
+PRODUCT|3|1|Free-Range Eggs|dairy|Farm-fresh eggs from free-range chickens|5.99|30|dozen|2.50

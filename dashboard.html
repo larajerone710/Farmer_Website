@@ -1,0 +1,1702 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Direct Farm Market - Dashboard</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Reset and base styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-gradient: linear-gradient(135deg, #4CAF50 0%, #45a049 100%);
+            --secondary-gradient: linear-gradient(135deg, #FF9800 0%, #FF5722 100%);
+            --success-gradient: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            --warning-gradient: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+            --info-gradient: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+            --light-gradient: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+            --sidebar-gradient: linear-gradient(135deg, #4CAF50 0%, #45a049 100%);
+            --header-gradient: linear-gradient(135deg, #4CAF50 0%, #8BC34A 100%);
+            --card-gradient: linear-gradient(135deg, #fdfcfb 0%, #e2d1c3 100%);
+            --nav-gradient: linear-gradient(135deg, #C8E6C9 0%, #A5D6A7 100%);
+            --blog-gradient: linear-gradient(135deg, #4CAF50 0%, #45a049 100%);
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #4CAF50 0%, #2196F3 50%, #FF9800 100%);
+            background-size: 400% 400%;
+            animation: gradientShift 15s ease infinite;
+            color: #2c3e50;
+            line-height: 1.6;
+            min-height: 100vh;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* Floating elements */
+        .floating-element {
+            position: absolute;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.2);
+            animation: float 15s infinite linear;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        .floating-element:nth-child(1) { width: 100px; height: 100px; top: 10%; left: 10%; animation-delay: 0s; }
+        .floating-element:nth-child(2) { width: 150px; height: 150px; top: 70%; left: 80%; animation-delay: -5s; }
+        .floating-element:nth-child(3) { width: 80px; height: 80px; top: 20%; left: 85%; animation-delay: -10s; }
+        .floating-element:nth-child(4) { width: 120px; height: 120px; top: 80%; left: 15%; animation-delay: -7s; }
+
+        @keyframes float {
+            0% { transform: translate(0, 0) rotate(0deg); }
+            25% { transform: translate(100px, 50px) rotate(90deg); }
+            50% { transform: translate(50px, 100px) rotate(180deg); }
+            75% { transform: translate(-50px, 50px) rotate(270deg); }
+            100% { transform: translate(0, 0) rotate(360deg); }
+        }
+
+        /* Dashboard Styles */
+        .dashboard-container {
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            position: relative;
+            z-index: 1;
+        }
+
+        header {
+            background: var(--header-gradient);
+            color: white;
+            padding: 1rem 2rem;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header-left h1 {
+            font-size: 1.8rem;
+            margin-bottom: 0.2rem;
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.2);
+        }
+
+        .system-status {
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .user-role {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            backdrop-filter: blur(5px);
+        }
+
+        .btn-logout {
+            background: rgba(231, 76, 60, 0.8);
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.3s;
+            backdrop-filter: blur(5px);
+        }
+
+        .btn-logout:hover {
+            background: rgba(192, 57, 43, 0.9);
+            transform: translateY(-2px);
+        }
+
+        /* Top Navigation */
+        .top-nav {
+            background: var(--nav-gradient);
+            padding: 0.5rem 2rem;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .nav-container {
+            display: flex;
+            gap: 0.5rem;
+            overflow-x: auto;
+            padding-bottom: 5px;
+        }
+
+        .nav-btn {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.7rem 1.2rem;
+            background: rgba(255, 255, 255, 0.7);
+            border: none;
+            border-radius: 6px;
+            color: #555;
+            text-align: left;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 0.9rem;
+            backdrop-filter: blur(5px);
+            white-space: nowrap;
+            position: relative;
+        }
+
+        .nav-btn:hover {
+            background: rgba(255, 255, 255, 0.9);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .nav-btn.active {
+            background: var(--primary-gradient);
+            color: white;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .cart-badge {
+            background: #e74c3c;
+            color: white;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.7rem;
+            position: absolute;
+            top: -5px;
+            right: -5px;
+        }
+
+        .dashboard-content {
+            flex: 1;
+            padding: 2rem;
+            overflow-y: auto;
+        }
+
+        .main-content {
+            background: rgba(255, 255, 255, 0.85);
+            border-radius: 12px;
+            padding: 2rem;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            backdrop-filter: blur(10px);
+        }
+
+        .content-section {
+            display: block;
+            animation: fadeIn 0.4s ease-out;
+        }
+
+        .content-section.hidden {
+            display: none;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .section-header {
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid rgba(76, 175, 80, 0.2);
+        }
+
+        .section-header h2 {
+            color: #2c3e50;
+            margin-bottom: 0.5rem;
+            font-size: 1.8rem;
+        }
+
+        .section-header p {
+            color: #7f8c8d;
+            font-size: 1rem;
+        }
+
+        /* Stats Grid */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: var(--card-gradient);
+            padding: 1.5rem;
+            border-radius: 12px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            transition: all 0.3s;
+            border: 1px solid rgba(255, 255, 255, 0.5);
+        }
+
+        .stat-card:hover { transform: translateY(-5px); box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15); }
+        .stat-card:nth-child(1) { background: var(--primary-gradient); color: white; }
+        .stat-card:nth-child(2) { background: var(--success-gradient); color: white; }
+        .stat-card:nth-child(3) { background: var(--info-gradient); color: white; }
+        .stat-card:nth-child(4) { background: var(--warning-gradient); color: white; }
+
+        .stat-icon { font-size: 2.5rem; margin-bottom: 0.5rem; filter: drop-shadow(1px 1px 2px rgba(0, 0, 0, 0.2)); }
+        .stat-number { font-size: 2.2rem; font-weight: bold; margin-bottom: 0.5rem; text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2); }
+        .stat-label { font-size: 0.9rem; opacity: 0.9; }
+
+        /* Products Grid */
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 25px;
+            margin-top: 20px;
+        }
+        
+        .product-card {
+            border: 1px solid #e0e0e0;
+            border-radius: 15px;
+            overflow: hidden;
+            transition: all 0.3s;
+            background: white;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .product-card:hover { transform: translateY(-5px); box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
+        
+        .product-image {
+            height: 180px;
+            background: linear-gradient(135deg, #4CAF50 0%, #45a049 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 14px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .product-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            position: absolute;
+            top: 0; left: 0;
+        }
+
+        .product-badge {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: var(--secondary-gradient);
+            color: white;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+            z-index: 2;
+        }
+        
+        .product-info {
+            padding: 15px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .product-name { font-weight: 600; margin-bottom: 5px; font-size: 18px; }
+        .product-farmer { color: #7f8c8d; font-size: 14px; margin-bottom: 10px; }
+        .product-price { color: #4CAF50; font-weight: bold; font-size: 18px; margin-bottom: 15px; }
+        .product-description { color: #7f8c8d; font-size: 14px; margin-bottom: 15px; line-height: 1.4; flex: 1; }
+        
+        .product-actions { display: flex; gap: 10px; margin-top: auto; }
+
+        .btn {
+            padding: 8px 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: 600;
+            flex: 1;
+            text-align: center;
+        }
+
+        .btn-primary { background: var(--primary-gradient); color: white; }
+        .btn-secondary { background: var(--secondary-gradient); color: white; }
+        .btn-danger { background: #e74c3c; color: white; }
+
+        .btn:hover { transform: translateY(-2px); box-shadow: 0 3px 8px rgba(0,0,0,0.2); }
+
+        /* Forms */
+        .form-container {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+
+        .form-group { margin-bottom: 15px; }
+        .form-group label { display: block; margin-bottom: 5px; font-weight: 600; color: #2c3e50; }
+        
+        .form-control {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: #4CAF50;
+            box-shadow: 0 0 0 2px rgba(76, 175, 80, 0.2);
+        }
+
+        /* Tables */
+        .table-container { overflow-x: auto; margin-top: 20px; }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        th, td { padding: 12px 15px; text-align: left; border-bottom: 1px solid #e0e0e0; }
+        th { background: var(--primary-gradient); color: white; font-weight: 600; }
+        tr:hover { background: rgba(76, 175, 80, 0.05); }
+
+        .status-badge { padding: 5px 10px; border-radius: 20px; font-size: 12px; font-weight: bold; }
+        .status-pending { background: rgba(255, 193, 7, 0.2); color: #856404; }
+        .status-completed { background: rgba(40, 167, 69, 0.2); color: #155724; }
+        .status-cancelled { background: rgba(220, 53, 69, 0.2); color: #721c24; }
+        .status-processing { background: rgba(23, 162, 184, 0.2); color: #0c5460; }
+        .status-shipped { background: rgba(108, 117, 125, 0.2); color: #383d41; }
+        .status-delivered { background: rgba(40, 167, 69, 0.2); color: #155724; }
+
+        /* Toast Notifications */
+        #toast-container {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .toast {
+            min-width: 250px;
+            padding: 15px 20px;
+            border-radius: 8px;
+            background: white;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            animation: slideIn 0.3s ease-out forwards;
+            border-left: 5px solid #4CAF50;
+        }
+
+        .toast.error { border-left-color: #e74c3c; }
+        .toast.info { border-left-color: #3498db; }
+
+        @keyframes slideIn {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+
+        /* Modal Styles */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s;
+        }
+
+        .modal-overlay.active { opacity: 1; visibility: visible; }
+
+        .modal-content {
+            background: white;
+            padding: 2rem;
+            border-radius: 10px;
+            width: 90%;
+            max-width: 500px;
+            transform: translateY(-20px);
+            transition: all 0.3s;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .modal-overlay.active .modal-content { transform: translateY(0); }
+
+        /* Payment & Feedback Specifics */
+        .payment-method-btn {
+            flex: 1; min-width: 120px; padding: 1rem; border: 2px solid #e0e0e0;
+            border-radius: 8px; background: white; cursor: pointer; transition: all 0.3s;
+            text-align: center; display: flex; flex-direction: column; align-items: center; gap: 5px;
+        }
+        .payment-method-btn:hover { border-color: #4CAF50; transform: translateY(-2px); }
+        .payment-method-btn.active { border-color: #4CAF50; background: rgba(76, 175, 80, 0.1); }
+        
+        .payment-form { margin-top: 1.5rem; padding: 1.5rem; border: 1px solid #e0e0e0; border-radius: 8px; background: #f9f9f9; }
+        .star { cursor: pointer; font-size: 1.5rem; color: #ccc; transition: color 0.2s; }
+        .star:hover, .star.active { color: #FFD700; }
+        .category-badge { text-transform: capitalize; }
+        .feedback-item { transition: transform 0.2s; }
+        .feedback-item:hover { transform: translateY(-2px); box-shadow: 0 4px 8px rgba(0,0,0,0.1); }
+
+        /* Voice Assistant */
+        .voice-assistant {
+            position: fixed; bottom: 2rem; right: 2rem; z-index: 1000;
+        }
+        .voice-btn {
+            width: 60px; height: 60px; border-radius: 50%;
+            background: var(--primary-gradient); color: white; border: none;
+            font-size: 1.5rem; cursor: pointer;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2); transition: all 0.3s;
+        }
+        .voice-btn:hover { transform: scale(1.1); }
+        .voice-btn.listening { animation: pulse 1.5s infinite; }
+
+        @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.1); } 100% { transform: scale(1); } }
+
+        /* Technology Blog Cards */
+        .tech-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .tech-card {
+            background: var(--card-gradient);
+            border-radius: 12px;
+            padding: 2rem;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s;
+            border: 1px solid rgba(255, 255, 255, 0.5);
+        }
+
+        .tech-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+        }
+
+        .tech-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            text-align: center;
+        }
+
+        .tech-card h3 {
+            color: #2c3e50;
+            margin-bottom: 1rem;
+            font-size: 1.4rem;
+        }
+
+        .tech-card p {
+            color: #7f8c8d;
+            line-height: 1.6;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .header-content { flex-direction: column; gap: 1rem; text-align: center; }
+            .nav-container { flex-wrap: wrap; justify-content: center; }
+            .stats-grid { grid-template-columns: 1fr; }
+            .tech-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Floating background elements -->
+    <div class="floating-element"></div>
+    <div class="floating-element"></div>
+    <div class="floating-element"></div>
+    <div class="floating-element"></div>
+
+    <!-- Toast Container -->
+    <div id="toast-container"></div>
+
+    <div class="dashboard-container">
+        <header>
+            <div class="header-content">
+                <div class="header-left">
+                    <h1>🌱 Direct Farm Market</h1>
+                    <div class="system-status">Farm to Table, Direct to You</div>
+                </div>
+                <div class="user-info">
+                    <div style="text-align: right;">
+                        <div id="userFullName" style="font-weight: bold;">Loading User...</div>
+                        <span class="user-role" id="userRole">Farmer</span>
+                    </div>
+                    <button id="logoutBtn" class="btn-logout" title="Logout">🚪 Logout</button>
+                </div>
+            </div>
+        </header>
+        
+        <nav class="top-nav">
+            <div class="nav-container" id="navContainer">
+                <!-- Navigation buttons will be populated based on role -->
+            </div>
+        </nav>
+        
+        <div class="dashboard-content">
+            <main class="main-content">
+                <!-- Dashboard Section -->
+                <section id="dashboardSection" class="content-section">
+                    <div class="section-header">
+                        <h2 id="dashboardTitle">Farm Dashboard</h2>
+                        <p id="dashboardSubtitle">Manage your farm business and track performance</p>
+                    </div>
+                    
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <div class="stat-icon">🌾</div>
+                            <div class="stat-number" id="totalProducts">0</div>
+                            <div class="stat-label">Total Products</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon">📦</div>
+                            <div class="stat-number" id="totalOrders">0</div>
+                            <div class="stat-label">Total Orders</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon">💰</div>
+                            <div class="stat-number" id="totalRevenue">$0</div>
+                            <div class="stat-label">Total Revenue</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon">⭐</div>
+                            <div class="stat-number" id="rating">4.8</div>
+                            <div class="stat-label">Customer Rating</div>
+                        </div>
+                    </div>
+                    
+                    <div class="section-header">
+                        <h2>Farming Technology</h2>
+                        <p>Latest innovations in agricultural technology</p>
+                    </div>
+                    
+                    <div class="tech-blog-section">
+                        <div class="tech-grid">
+                            <div class="tech-card">
+                                <div class="tech-icon">🌱</div>
+                                <h3>Smart Irrigation Systems</h3>
+                                <p>Advanced IoT-based irrigation systems that optimize water usage based on soil moisture levels and weather forecasts.</p>
+                                <p><strong>Benefits:</strong> 40% water savings, Increased crop yield, Automated scheduling</p>
+                            </div>
+                            
+                            <div class="tech-card">
+                                <div class="tech-icon">📱</div>
+                                <h3>Farm Management Apps</h3>
+                                <p>Mobile applications that help farmers track inventory, manage orders, and monitor farm operations in real-time.</p>
+                                <p><strong>Features:</strong> Inventory management, Order tracking, Financial analytics</p>
+                            </div>
+                            
+                            <div class="tech-card">
+                                <div class="tech-icon">🚜</div>
+                                <h3>Precision Agriculture</h3>
+                                <p>Using GPS, drones, and sensors to optimize field-level management regarding crop farming.</p>
+                                <p><strong>Technologies:</strong> GPS guidance, Drones, Soil sensors, Automated steering</p>
+                            </div>
+                            
+                            <div class="tech-card">
+                                <div class="tech-icon">🌞</div>
+                                <h3>Solar-Powered Solutions</h3>
+                                <p>Renewable energy systems for farm operations including solar-powered irrigation and processing equipment.</p>
+                                <p><strong>Advantages:</strong> Reduced energy costs, Sustainable operations, Energy independence</p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- My Products Section (Farmer Only) -->
+                <section id="myProductsSection" class="content-section hidden">
+                    <div class="section-header">
+                        <h2>My Products</h2>
+                        <p>Manage your farm products and inventory</p>
+                    </div>
+                    
+                    <div class="form-container">
+                        <h3>Add New Product</h3>
+                        <form id="addProductForm">
+                            <div class="form-group">
+                                <label for="productName">Product Name</label>
+                                <input type="text" id="productName" class="form-control" placeholder="Enter product name" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="productCategory">Category</label>
+                                <select id="productCategory" class="form-control" required>
+                                    <option value="">Select Category</option>
+                                    <option value="vegetables">Vegetables</option>
+                                    <option value="fruits">Fruits</option>
+                                    <option value="grains">Grains</option>
+                                    <option value="dairy">Dairy</option>
+                                    <option value="other">Other</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="productDescription">Description</label>
+                                <textarea id="productDescription" class="form-control" placeholder="Enter product description" required></textarea>
+                            </div>
+                            <div class="form-group">
+                                <label for="productPrice">Price ($)</label>
+                                <input type="number" id="productPrice" class="form-control" placeholder="Enter price" step="0.01" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="productQuantity">Quantity</label>
+                                <input type="number" id="productQuantity" class="form-control" placeholder="Enter quantity" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="productImage">Product Image</label>
+                                <input type="file" id="productImage" class="form-control" accept="image/*">
+                                <small style="color: #666;">Upload an image for your product (optional)</small>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Add Product</button>
+                        </form>
+                    </div>
+                    
+                    <h3>My Products</h3>
+                    <div id="myProductsGrid" class="products-grid">
+                        <!-- Products will be loaded here -->
+                    </div>
+                </section>
+
+                <!-- Orders Section -->
+                <section id="ordersSection" class="content-section hidden">
+                    <div class="section-header">
+                        <h2 id="ordersTitle">Customer Orders</h2>
+                        <p id="ordersSubtitle">Manage and fulfill customer orders</p>
+                    </div>
+                    <div id="ordersList"></div>
+                </section>
+
+                <!-- Marketplace Section (Customer Only) -->
+                <section id="marketplaceSection" class="content-section hidden">
+                    <div class="section-header">
+                        <h2>Farm Fresh Marketplace</h2>
+                        <p>Discover fresh products directly from farmers</p>
+                    </div>
+                    <div id="marketplaceGrid" class="products-grid"></div>
+                </section>
+
+                <!-- Cart Section (Customer Only) -->
+                <section id="cartSection" class="content-section hidden">
+                    <div class="section-header">
+                        <h2>My Shopping Cart</h2>
+                        <p>Review your selected items</p>
+                    </div>
+                    <div id="cartItems"></div>
+                </section>
+
+                <!-- Favorites Section (Customer Only) -->
+                <section id="favoritesSection" class="content-section hidden">
+                    <div class="section-header">
+                        <h2>My Favorites</h2>
+                        <p>Your favorite farm products</p>
+                    </div>
+                    <div id="favoritesGrid" class="products-grid"></div>
+                </section>
+
+                <!-- Payment Section (Customer Only) -->
+                <section id="paymentSection" class="content-section hidden">
+                    <div class="section-header">
+                        <h2>Secure Payment</h2>
+                        <p>Complete your purchase with secure payment options</p>
+                    </div>
+                    <div class="form-container">
+                        <h3>Order Summary</h3>
+                        <div id="paymentSummary"></div>
+                        
+                        <div class="payment-options" style="margin-top: 2rem;">
+                            <h3>Select Payment Method</h3>
+                            <div class="payment-methods" style="display: flex; gap: 1rem; margin: 1rem 0; flex-wrap: wrap;">
+                                <button class="payment-method-btn active" data-method="credit">💳 Credit Card</button>
+                                <button class="payment-method-btn" data-method="debit">🏦 Debit Card</button>
+                                <button class="payment-method-btn" data-method="scanner">📱 QR Scanner</button>
+                            </div>
+                            
+                            <div id="cardPaymentForm" class="payment-form">
+                                <form id="cardForm">
+                                    <div class="form-group">
+                                        <label for="cardNumber">Card Number</label>
+                                        <input type="text" id="cardNumber" class="form-control" placeholder="1234 5678 9012 3456" maxlength="19">
+                                    </div>
+                                    <div style="display: flex; gap: 1rem;">
+                                        <div class="form-group" style="flex: 1;">
+                                            <label for="expiryDate">Expiry Date</label>
+                                            <input type="text" id="expiryDate" class="form-control" placeholder="MM/YY" maxlength="5">
+                                        </div>
+                                        <div class="form-group" style="flex: 1;">
+                                            <label for="cvv">CVV</label>
+                                            <input type="text" id="cvv" class="form-control" placeholder="123" maxlength="3">
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="cardHolder">Card Holder Name</label>
+                                        <input type="text" id="cardHolder" class="form-control" placeholder="John Doe">
+                                    </div>
+                                    <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 1rem;">Pay Now</button>
+                                </form>
+                            </div>
+                            
+                            <div id="qrPaymentForm" class="payment-form hidden">
+                                <div style="text-align: center; padding: 2rem;">
+                                    <div style="background: white; padding: 1rem; border-radius: 8px; display: inline-block; margin: 1rem 0; border: 1px solid #ddd;">
+                                        <!-- QR Code Placeholder -->
+                                        <div style="width: 200px; height: 200px; background: linear-gradient(45deg, #4CAF50, #2196F3); display: flex; align-items: center; justify-content: center; color: white; font-weight: bold;">
+                                            QR CODE
+                                        </div>
+                                    </div>
+                                    <p>Amount: <strong><span id="qrAmount">$0.00</span></strong></p>
+                                    <button class="btn btn-primary" onclick="simulateQRPayment()">Simulate QR Payment</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Feedback Section (Customer Only) -->
+                <section id="feedbackSection" class="content-section hidden">
+                    <div class="section-header">
+                        <h2>Customer Feedback</h2>
+                        <p>Share your experience and help us improve</p>
+                    </div>
+                    <div class="form-container">
+                        <h3>Submit Your Feedback</h3>
+                        <form id="feedbackForm">
+                            <div class="form-group">
+                                <label for="feedbackOrder">Order ID (Optional)</label>
+                                <select id="feedbackOrder" class="form-control">
+                                    <option value="">Select Order</option>
+                                </select>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="feedbackRating">Overall Rating</label>
+                                <div class="rating-stars" style="display: flex; gap: 0.5rem; margin: 0.5rem 0;">
+                                    <span class="star" data-rating="1">⭐</span>
+                                    <span class="star" data-rating="2">⭐</span>
+                                    <span class="star" data-rating="3">⭐</span>
+                                    <span class="star" data-rating="4">⭐</span>
+                                    <span class="star" data-rating="5">⭐</span>
+                                </div>
+                                <input type="hidden" id="feedbackRating" value="0">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="feedbackCategory">Feedback Category</label>
+                                <select id="feedbackCategory" class="form-control" required>
+                                    <option value="">Select Category</option>
+                                    <option value="product-quality">Product Quality</option>
+                                    <option value="delivery">Delivery Service</option>
+                                    <option value="customer-service">Customer Service</option>
+                                    <option value="website-experience">Website Experience</option>
+                                    <option value="other">Other</option>
+                                </select>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="feedbackTitle">Title</label>
+                                <input type="text" id="feedbackTitle" class="form-control" placeholder="Brief summary of your feedback" required>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="feedbackMessage">Your Feedback</label>
+                                <textarea id="feedbackMessage" class="form-control" placeholder="Please share your experience in detail..." rows="5" required></textarea>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label>
+                                    <input type="checkbox" id="allowContact" checked>
+                                    Allow us to contact you about this feedback
+                                </label>
+                            </div>
+                            
+                            <button type="submit" class="btn btn-primary">Submit Feedback</button>
+                        </form>
+                    </div>
+                    
+                    <div class="form-container" style="margin-top: 2rem;">
+                        <h3>Your Previous Feedback</h3>
+                        <div id="previousFeedback"></div>
+                    </div>
+                </section>
+
+                <!-- Blog Section -->
+                <section id="blogSection" class="content-section hidden">
+                    <div class="section-header">
+                        <h2>Farming Technology Blog</h2>
+                        <p>Latest innovations and trends in agriculture</p>
+                    </div>
+                    
+                    <div class="blog-grid">
+                        <div class="product-card">
+                            <div class="product-image"><span style="font-size: 40px;">🌱</span></div>
+                            <div class="product-info">
+                                <div class="product-name">The Future of Sustainable Farming</div>
+                                <div class="product-description">Exploring how technology is revolutionizing sustainable agriculture practices and helping farmers reduce environmental impact.</div>
+                                <div style="display: flex; justify-content: space-between; color: #7f8c8d; font-size: 12px; margin-top: 10px;">
+                                    <span>2023-10-15</span>
+                                    <span>Sustainability</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="product-card">
+                            <div class="product-image"><span style="font-size: 40px;">📱</span></div>
+                            <div class="product-info">
+                                <div class="product-name">Mobile Apps for Modern Farmers</div>
+                                <div class="product-description">How smartphone applications are helping farmers manage their operations, track inventory, and connect directly with consumers.</div>
+                                <div style="display: flex; justify-content: space-between; color: #7f8c8d; font-size: 12px; margin-top: 10px;">
+                                    <span>2023-10-10</span>
+                                    <span>Technology</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="product-card">
+                            <div class="product-image"><span style="font-size: 40px;">💧</span></div>
+                            <div class="product-info">
+                                <div class="product-name">Smart Irrigation Systems</div>
+                                <div class="product-description">Advanced irrigation technologies that use sensors and weather data to optimize water usage and improve crop yields.</div>
+                                <div style="display: flex; justify-content: space-between; color: #7f8c8d; font-size: 12px; margin-top: 10px;">
+                                    <span>2023-10-05</span>
+                                    <span>Irrigation</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </main>
+        </div>
+    </div>
+
+    <!-- Voice Assistant -->
+    <div class="voice-assistant">
+        <button class="voice-btn" id="voiceAssistantBtn" title="Voice Assistant">
+            <i class="fas fa-microphone"></i>
+        </button>
+    </div>
+
+    <!-- Modal Template (Dynamic Content) -->
+    <div id="modalOverlay" class="modal-overlay">
+        <div class="modal-content" id="modalBody"></div>
+    </div>
+
+    <script>
+        /**
+         * STORAGE & DATABASE LAYER
+         * Using localStorage to simulate a database.
+         */
+        const DB_KEYS = {
+            USER: 'dfm_user',
+            PRODUCTS: 'dfm_products',
+            ORDERS: 'dfm_orders',
+            CART: 'dfm_cart',
+            FAVORITES: 'dfm_favorites',
+            FEEDBACK: 'dfm_feedback'
+        };
+
+        // Helper to save data to local storage
+        function saveData(key, data) {
+            try {
+                localStorage.setItem(key, JSON.stringify(data));
+                return true;
+            } catch (e) {
+                console.error("Storage Error:", e);
+                showToast("Storage limit reached! Image might be too large.", "error");
+                return false;
+            }
+        }
+
+        // Helper to load data from local storage
+        function loadData(key, defaultValue) {
+            const data = localStorage.getItem(key);
+            return data ? JSON.parse(data) : defaultValue;
+        }
+
+        // Initial Data Seeds (if storage is empty)
+        const initialProducts = [
+            { 
+                id: 1, 
+                name: 'Organic Carrots', 
+                category: 'vegetables', 
+                price: 2.99, 
+                unit: 'kg', 
+                quantity: 50, 
+                description: 'Fresh organic carrots from our farm', 
+                image: '🥕',
+                farmer: 'Green Valley Farms',
+                rating: 4.5
+            },
+            { 
+                id: 2, 
+                name: 'Fresh Apples', 
+                category: 'fruits', 
+                price: 3.49, 
+                unit: 'kg', 
+                quantity: 30, 
+                description: 'Sweet and crunchy apples', 
+                image: '🍎',
+                farmer: 'Sunny Orchard',
+                rating: 4.7
+            },
+            { 
+                id: 3, 
+                name: 'Farm Eggs', 
+                category: 'dairy', 
+                price: 4.99, 
+                unit: 'dozen', 
+                quantity: 20, 
+                description: 'Free-range farm eggs', 
+                image: '🥚',
+                farmer: 'Happy Hens Farm',
+                rating: 4.8
+            }
+        ];
+
+        const initialOrders = [
+            { id: 1045, customer: 'Fresh Market', date: '2023-10-22', amount: 68.50, status: 'processing', items: 5 },
+            { id: 1044, customer: 'Local Grocer', date: '2023-10-21', amount: 42.75, status: 'shipped', items: 3 }
+        ];
+
+        /**
+         * APPLICATION STATE
+         */
+        let currentRole = 'farmer';
+        let currentUserData = { name: 'Welcome', role: 'farmer' };
+
+        // Load State from Database
+        let products = loadData(DB_KEYS.PRODUCTS, initialProducts);
+        let orders = loadData(DB_KEYS.ORDERS, initialOrders);
+        let cart = loadData(DB_KEYS.CART, []);
+        let favorites = loadData(DB_KEYS.FAVORITES, []);
+        let feedbacks = loadData(DB_KEYS.FEEDBACK, []);
+
+        /**
+         * UTILITIES
+         */
+        function showToast(message, type = 'success') {
+            const container = document.getElementById('toast-container');
+            const toast = document.createElement('div');
+            toast.className = `toast ${type}`;
+            toast.innerHTML = `
+                <i class="fas ${type === 'success' ? 'fa-check-circle' : type === 'error' ? 'fa-exclamation-circle' : 'fa-info-circle'}"></i>
+                <span>${message}</span>
+            `;
+            container.appendChild(toast);
+            setTimeout(() => {
+                toast.style.opacity = '0';
+                setTimeout(() => toast.remove(), 300);
+            }, 3000);
+        }
+
+        function closeModal() {
+            document.getElementById('modalOverlay').classList.remove('active');
+        }
+
+        /**
+         * INITIALIZATION
+         */
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeUser();
+            setupEventListeners();
+            buildNavigation();
+            switchSection('dashboardSection');
+            updateStats();
+        });
+
+        function initializeUser() {
+            // Priority 1: URL Parameters (Simulating login from previous page)
+            const urlParams = new URLSearchParams(window.location.search);
+            const userType = urlParams.get('userType') || 'farmer';
+            const userName = urlParams.get('fullName');
+
+            // Priority 2: LocalStorage (Simulating persistent session)
+            const storedUser = loadData(DB_KEYS.USER, null);
+
+            if (userName) {
+                // Fresh Login via URL
+                currentUserData = { name: userName, role: userType };
+                saveData(DB_KEYS.USER, currentUserData);
+            } else if (storedUser) {
+                // Returning user
+                currentUserData = storedUser;
+            } else {
+                // Default fallback
+                currentUserData = { name: 'Welcome', role: 'farmer' };
+            }
+
+            currentRole = currentUserData.role;
+
+            // Update Header UI
+            document.getElementById('userFullName').textContent = currentUserData.name;
+            document.getElementById('userRole').textContent = currentRole.charAt(0).toUpperCase() + currentRole.slice(1);
+            
+            // Update Titles based on Role
+            if (currentRole === 'farmer') {
+                document.getElementById('dashboardTitle').textContent = 'Farm Dashboard';
+                document.getElementById('dashboardSubtitle').textContent = 'Manage your farm business';
+                document.getElementById('ordersTitle').textContent = 'Customer Orders';
+                document.getElementById('ordersSubtitle').textContent = 'Manage and fulfill customer orders';
+            } else {
+                document.getElementById('dashboardTitle').textContent = 'Shopping Dashboard';
+                document.getElementById('dashboardSubtitle').textContent = 'Discover fresh products';
+                document.getElementById('ordersTitle').textContent = 'My Orders';
+                document.getElementById('ordersSubtitle').textContent = 'Track your purchases and order history';
+            }
+        }
+
+        function setupEventListeners() {
+            document.getElementById('logoutBtn').addEventListener('click', function() {
+                if (confirm('Are you sure you want to logout?')) {
+                    localStorage.removeItem(DB_KEYS.USER);
+                    window.location.href = 'index.html';
+                }
+            });
+
+            document.getElementById('voiceAssistantBtn').addEventListener('click', function() {
+                this.classList.add('listening');
+                showToast('Listening...', 'info');
+                setTimeout(() => {
+                    this.classList.remove('listening');
+                    showToast('Command recognized: Navigation');
+                    // Demo command
+                    if(currentRole === 'farmer') switchSection('myProductsSection');
+                    else switchSection('marketplaceSection');
+                }, 2000);
+            });
+        }
+
+        /**
+         * NAVIGATION
+         */
+        function buildNavigation() {
+            let navButtons = '';
+            
+            if (currentRole === 'farmer') {
+                navButtons = `
+                    <button class="nav-btn active" onclick="switchSection('dashboardSection')">📊 Dashboard</button>
+                    <button class="nav-btn" onclick="switchSection('myProductsSection')">🌾 My Products</button>
+                    <button class="nav-btn" onclick="switchSection('ordersSection')">📦 Orders</button>
+                    <button class="nav-btn" onclick="switchSection('blogSection')">📚 Tech Blog</button>
+                `;
+            } else {
+                const cartCount = cart.length;
+                const cartBadge = cartCount > 0 ? `<span class="cart-badge">${cartCount}</span>` : '';
+                
+                navButtons = `
+                    <button class="nav-btn active" onclick="switchSection('dashboardSection')">📊 Dashboard</button>
+                    <button class="nav-btn" onclick="switchSection('marketplaceSection')">🛒 Marketplace</button>
+                    <button class="nav-btn" onclick="switchSection('favoritesSection')">❤️ Favorites</button>
+                    <button class="nav-btn" onclick="switchSection('ordersSection')">📦 My Orders</button>
+                    <button class="nav-btn" onclick="switchSection('cartSection')">🛍️ Cart ${cartBadge}</button>
+                    <button class="nav-btn" onclick="switchSection('paymentSection')">💳 Payment</button>
+                    <button class="nav-btn" onclick="switchSection('feedbackSection')">📝 Feedback</button>
+                    <button class="nav-btn" onclick="switchSection('blogSection')">📚 Tech Blog</button>
+                `;
+            }
+            document.getElementById('navContainer').innerHTML = navButtons;
+        }
+
+        function switchSection(sectionId) {
+            // Hide all sections
+            document.querySelectorAll('.content-section').forEach(s => s.classList.add('hidden'));
+            
+            // Show target
+            document.getElementById(sectionId).classList.remove('hidden');
+            
+            // Update Nav State
+            document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+            const activeBtn = document.querySelector(`.nav-btn[onclick*="'${sectionId}'"]`);
+            if(activeBtn) activeBtn.classList.add('active');
+
+            // Load specific content data
+            loadSectionContent(sectionId);
+        }
+
+        function loadSectionContent(sectionId) {
+            switch(sectionId) {
+                case 'myProductsSection': loadMyProducts(); break;
+                case 'ordersSection': loadOrders(); break;
+                case 'marketplaceSection': loadMarketplace(); break;
+                case 'cartSection': loadCart(); break;
+                case 'favoritesSection': loadFavorites(); break;
+                case 'paymentSection': loadPayment(); break;
+                case 'feedbackSection': loadFeedback(); break;
+                default: updateStats(); // Dashboard
+            }
+        }
+
+        /**
+         * DASHBOARD & STATS
+         */
+        function updateStats() {
+            if (currentRole === 'farmer') {
+                // Farmer stats
+                const farmerProducts = products.filter(p => !p.farmer || p.farmer === currentUserData.name);
+                const farmerOrders = orders.filter(o => o.customer !== currentUserData.name);
+                
+                document.getElementById('totalProducts').textContent = farmerProducts.length;
+                document.getElementById('totalOrders').textContent = farmerOrders.length;
+                const revenue = farmerOrders.reduce((sum, o) => sum + o.amount, 0);
+                document.getElementById('totalRevenue').textContent = `$${revenue.toFixed(2)}`;
+                document.getElementById('rating').textContent = '4.8';
+            } else {
+                // Consumer stats
+                document.getElementById('totalProducts').textContent = products.length;
+                document.getElementById('totalOrders').textContent = orders.filter(o => o.customer === currentUserData.name).length;
+                const spent = orders.filter(o => o.customer === currentUserData.name).reduce((sum, o) => sum + o.amount, 0);
+                document.getElementById('totalRevenue').textContent = `$${spent.toFixed(2)}`;
+                document.getElementById('rating').textContent = '5.0';
+            }
+        }
+
+        /**
+         * PRODUCT MANAGEMENT (Farmer Only)
+         */
+        function loadMyProducts() {
+            const grid = document.getElementById('myProductsGrid');
+            const farmerProducts = products.filter(p => !p.farmer || p.farmer === currentUserData.name);
+            
+            if (farmerProducts.length === 0) {
+                grid.innerHTML = '<p>No products yet.</p>';
+                return;
+            }
+
+            grid.innerHTML = farmerProducts.map(p => `
+                <div class="product-card">
+                    <div class="product-image">
+                        ${p.image.startsWith('data:') ? `<img src="${p.image}" alt="${p.name}">` : `<span style="font-size:40px">${p.image}</span>`}
+                    </div>
+                    <div class="product-info">
+                        <div class="product-name">${p.name}</div>
+                        <div class="product-price">$${p.price}/${p.unit}</div>
+                        <p class="product-description">${p.description}</p>
+                        <p><strong>Stock:</strong> ${p.quantity} ${p.unit}</p>
+                        <div class="product-actions">
+                            <button class="btn btn-primary" onclick="editProduct(${p.id})">Edit</button>
+                            <button class="btn btn-danger" onclick="deleteProduct(${p.id})">Delete</button>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        document.getElementById('addProductForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            addNewProduct();
+        });
+
+        function addNewProduct() {
+            const fileInput = document.getElementById('productImage');
+            const processProduct = (imageData) => {
+                const newProduct = {
+                    id: Date.now(),
+                    name: document.getElementById('productName').value,
+                    category: document.getElementById('productCategory').value,
+                    description: document.getElementById('productDescription').value,
+                    price: parseFloat(document.getElementById('productPrice').value),
+                    quantity: parseInt(document.getElementById('productQuantity').value),
+                    unit: 'unit',
+                    image: imageData || '🌱',
+                    farmer: currentUserData.name,
+                    rating: 5.0
+                };
+
+                products.push(newProduct);
+                if(saveData(DB_KEYS.PRODUCTS, products)) {
+                    showToast('Product added successfully!');
+                    document.getElementById('addProductForm').reset();
+                    loadMyProducts();
+                    updateStats();
+                }
+            };
+
+            if (fileInput.files && fileInput.files[0]) {
+                const reader = new FileReader();
+                reader.onload = (e) => processProduct(e.target.result);
+                reader.readAsDataURL(fileInput.files[0]);
+            } else {
+                processProduct(null);
+            }
+        }
+
+        function editProduct(id) {
+            const product = products.find(p => p.id === id);
+            if (!product) return;
+
+            const modal = document.getElementById('modalOverlay');
+            const body = document.getElementById('modalBody');
+            
+            body.innerHTML = `
+                <h3>Edit Product</h3>
+                <form id="editForm">
+                    <div class="form-group"><label>Name</label><input id="e_name" class="form-control" value="${product.name}" required></div>
+                    <div class="form-group"><label>Price</label><input id="e_price" type="number" class="form-control" value="${product.price}" required></div>
+                    <div class="form-group"><label>Quantity</label><input id="e_qty" type="number" class="form-control" value="${product.quantity}" required></div>
+                    <div class="form-group"><label>Description</label><textarea id="e_desc" class="form-control" required>${product.description}</textarea></div>
+                    <div class="form-group"><label>New Image</label><input id="e_img" type="file" class="form-control"></div>
+                    <button type="button" class="btn btn-primary" onclick="saveEdit(${id})">Save Changes</button>
+                    <button type="button" class="btn btn-secondary" onclick="closeModal()">Cancel</button>
+                </form>
+            `;
+            modal.classList.add('active');
+        }
+
+        function saveEdit(id) {
+            const product = products.find(p => p.id === id);
+            const fileInput = document.getElementById('e_img');
+            
+            const finalizeEdit = (imgData) => {
+                product.name = document.getElementById('e_name').value;
+                product.price = parseFloat(document.getElementById('e_price').value);
+                product.quantity = parseInt(document.getElementById('e_qty').value);
+                product.description = document.getElementById('e_desc').value;
+                if(imgData) product.image = imgData;
+
+                saveData(DB_KEYS.PRODUCTS, products);
+                closeModal();
+                loadMyProducts();
+                showToast('Product updated!');
+            };
+
+            if (fileInput.files && fileInput.files[0]) {
+                const reader = new FileReader();
+                reader.onload = (e) => finalizeEdit(e.target.result);
+                reader.readAsDataURL(fileInput.files[0]);
+            } else {
+                finalizeEdit(null);
+            }
+        }
+
+        function deleteProduct(id) {
+            if(confirm('Delete this product?')) {
+                products = products.filter(p => p.id !== id);
+                saveData(DB_KEYS.PRODUCTS, products);
+                loadMyProducts();
+                updateStats();
+                showToast('Product deleted', 'info');
+            }
+        }
+
+        /**
+         * ORDERS (Both Farmer and Customer)
+         */
+        function loadOrders() {
+            const list = document.getElementById('ordersList');
+            const isFarmer = currentRole === 'farmer';
+            
+            let userOrders = [];
+            if (isFarmer) {
+                // Farmer sees all orders except their own purchases
+                userOrders = orders.filter(o => o.customer !== currentUserData.name);
+            } else {
+                // Customer sees only their orders
+                userOrders = orders.filter(o => o.customer === currentUserData.name);
+            }
+            
+            if (userOrders.length === 0) {
+                list.innerHTML = '<p>No orders found.</p>';
+                return;
+            }
+
+            let html = `<div class="table-container"><table><thead><tr>`;
+            if(isFarmer) html += `<th>ID</th><th>Customer</th><th>Date</th><th>Amount</th><th>Status</th><th>Action</th>`;
+            else html += `<th>ID</th><th>Date</th><th>Total</th><th>Status</th><th>Action</th>`;
+            html += `</tr></thead><tbody>`;
+
+            html += userOrders.map(o => {
+                const statusClass = `status-${o.status}`;
+                const actionBtn = isFarmer 
+                    ? `<button class="btn btn-primary" onclick="changeStatus(${o.id})">Update</button>`
+                    : `<button class="btn btn-primary" onclick="trackOrder(${o.id})">Track</button>`;
+                
+                if(isFarmer) {
+                    return `<tr>
+                        <td>#${o.id}</td><td>${o.customer}</td><td>${o.date}</td><td>$${o.amount.toFixed(2)}</td>
+                        <td><span class="status-badge ${statusClass}">${o.status}</span></td><td>${actionBtn}</td>
+                    </tr>`;
+                } else {
+                    return `<tr>
+                        <td>#${o.id}</td><td>${o.date}</td><td>$${o.amount.toFixed(2)}</td>
+                        <td><span class="status-badge ${statusClass}">${o.status}</span></td><td>${actionBtn}</td>
+                    </tr>`;
+                }
+            }).join('');
+            
+            html += `</tbody></table></div>`;
+            list.innerHTML = html;
+        }
+
+        function changeStatus(id) {
+            const order = orders.find(o => o.id === id);
+            const newStatus = prompt("Enter new status (processing, shipped, delivered, cancelled):", order.status);
+            if(['processing','shipped','delivered','cancelled'].includes(newStatus)) {
+                order.status = newStatus;
+                saveData(DB_KEYS.ORDERS, orders);
+                loadOrders();
+                showToast(`Order #${id} status updated`);
+            }
+        }
+
+        function trackOrder(id) {
+            const order = orders.find(o => o.id === id);
+            if (order) {
+                showToast(`Tracking order #${id}. Status: ${order.status}`, 'info');
+            }
+        }
+
+        /**
+         * MARKETPLACE & CART (Customer Only)
+         */
+        function loadMarketplace() {
+            const grid = document.getElementById('marketplaceGrid');
+            grid.innerHTML = products.map(p => `
+                <div class="product-card">
+                    <div class="product-image">
+                        ${p.image.startsWith('data:') ? `<img src="${p.image}">` : `<span style="font-size:40px">${p.image}</span>`}
+                        <div class="product-badge">${p.rating} ⭐</div>
+                    </div>
+                    <div class="product-info">
+                        <div class="product-name">${p.name}</div>
+                        <div class="product-farmer">Sold by: ${p.farmer || 'Farm Direct'}</div>
+                        <div class="product-price">$${p.price}/${p.unit}</div>
+                        <p class="product-description">${p.description}</p>
+                        <div class="product-actions">
+                            <button class="btn btn-primary" onclick="addToCart(${p.id})">Add to Cart</button>
+                            <button class="btn btn-secondary" onclick="addToFav(${p.id})">❤️ Favorite</button>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function addToCart(id) {
+            const product = products.find(p => p.id === id);
+            const existing = cart.find(c => c.id === id);
+            if(existing) existing.qty++;
+            else cart.push({ ...product, qty: 1, cartId: Date.now() });
+            
+            saveData(DB_KEYS.CART, cart);
+            updateCartBadge();
+            showToast(`${product.name} added to cart`);
+        }
+
+        function loadCart() {
+            const container = document.getElementById('cartItems');
+            if(cart.length === 0) {
+                container.innerHTML = '<div class="form-container"><p>Your cart is empty. Browse the marketplace to add items.</p><button class="btn btn-primary" onclick="switchSection(\'marketplaceSection\')">Browse Marketplace</button></div>';
+                return;
+            }
+
+            let total = 0;
+            let html = `<div class="form-container"><h3>Shopping Cart (${cart.length} items)</h3>`;
+            
+            html += cart.map(item => {
+                const itemTotal = item.price * item.qty;
+                total += itemTotal;
+                return `
+                <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid #eee; padding:10px;">
+                    <div style="display:flex; gap:10px; align-items:center;">
+                        <span style="font-size:24px">${item.image.startsWith('data') ? '📷' : item.image}</span>
+                        <div><strong>${item.name}</strong><br><small>${item.farmer || 'Farm Direct'}</small><br><small>$${item.price} x ${item.qty}</small></div>
+                    </div>
+                    <div style="display: flex; align-items: center; gap: 10px;">
+                        <button class="btn btn-secondary" onclick="updateCartQty(${item.cartId}, -1)">-</button>
+                        <span style="min-width: 30px; text-align: center;">${item.qty}</span>
+                        <button class="btn btn-secondary" onclick="updateCartQty(${item.cartId}, 1)">+</button>
+                        <span style="font-weight: bold; min-width: 80px; text-align: right;">$${itemTotal.toFixed(2)}</span>
+                        <button class="btn btn-danger" onclick="removeFromCart(${item.cartId})">Remove</button>
+                    </div>
+                </div>`;
+            }).join('');
+
+            html += `<div style="text-align:right; margin-top:20px; font-size:1.2rem;"><strong>Total: $${total.toFixed(2)}</strong></div>
+                     <button class="btn btn-primary" style="width:100%; margin-top:20px;" onclick="switchSection('paymentSection')">Proceed to Checkout</button>`;
+            html += `</div>`;
+            container.innerHTML = html;
+        }
+
+        function updateCartQty(cartId, change) {
+            const item = cart.find(c => c.cartId === cartId);
+            if(item) {
+                item.qty += change;
+                if(item.qty <= 0) cart = cart.filter(c => c.cartId !== cartId);
+                saveData(DB_KEYS.CART, cart);
+                updateCartBadge();
+                loadCart();
+            }
+        }
+
+        function removeFromCart(cartId) {
+            cart = cart.filter(c => c.cartId !== cartId);
+            saveData(DB_KEYS.CART, cart);
+            updateCartBadge();
+            loadCart();
+        }
+
+        function updateCartBadge() {
+            const cartBtn = document.querySelector('.nav-btn[onclick*="cartSection"]');
+            if (cartBtn) {
+                let badge = cartBtn.querySelector('.cart-badge');
+                if (cart.length > 0) {
+                    if (!badge) {
+                        badge = document.createElement('span');
+                        badge.className = 'cart-badge';
+                        cartBtn.appendChild(badge);
+                    }
+                    badge.textContent = cart.length;
+                } else if (badge) {
+                    badge.remove();
+                }
+            }
+        }
+
+        /**
+         * FAVORITES (Customer Only)
+         */
+        function addToFav(id) {
+            if(!favorites.find(f => f.id === id)) {
+                favorites.push(products.find(p => p.id === id));
+                saveData(DB_KEYS.FAVORITES, favorites);
+                showToast('Added to favorites');
+            } else {
+                showToast('Already in favorites', 'info');
+            }
+        }
+
+        function loadFavorites() {
+            const grid = document.getElementById('favoritesGrid');
+            if(favorites.length === 0) {
+                grid.innerHTML = '<div class="form-container"><p>No favorites yet. Browse the marketplace and add products to your favorites!</p><button class="btn btn-primary" onclick="switchSection(\'marketplaceSection\')">Browse Marketplace</button></div>';
+                return;
+            }
+            grid.innerHTML = favorites.map(p => `
+                 <div class="product-card">
+                    <div class="product-image">${p.image.startsWith('data') ? `<img src="${p.image}">` : `<span style="font-size:40px">${p.image}</span>`}</div>
+                    <div class="product-info">
+                        <div class="product-name">${p.name}</div>
+                        <div class="product-farmer">${p.farmer || 'Farm Direct'}</div>
+                        <div class="product-price">$${p.price}/${p.unit}</div>
+                        <div class="product-actions">
+                            <button class="btn btn-primary" onclick="addToCart(${p.id})">Add to Cart</button>
+                            <button class="btn btn-danger" onclick="removeFav(${p.id})">Remove</button>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function removeFav(id) {
+            favorites = favorites.filter(f => f.id !== id);
+            saveData(DB_KEYS.FAVORITES, favorites);
+            loadFavorites();
+        }
+
+        /**
+         * PAYMENT (Customer Only)
+         */
+        function loadPayment() {
+            const summary = document.getElementById('paymentSummary');
+            const total = cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
+            document.getElementById('qrAmount').textContent = `$${total.toFixed(2)}`;
+            
+            if(total === 0) {
+                summary.innerHTML = '<p>Your cart is empty.</p>';
+                return;
+            }
+
+            summary.innerHTML = cart.map(i => `<div style="display:flex; justify-content:space-between; margin-bottom:5px;">
+                <span>${i.name} (x${i.qty})</span><span>$${(i.price*i.qty).toFixed(2)}</span>
+            </div>`).join('') + `<hr><div style="display:flex; justify-content:space-between; font-weight:bold; margin-top:10px;">
+                <span>Total</span><span>$${total.toFixed(2)}</span>
+            </div>`;
+
+            // Payment Method Switching
+            document.querySelectorAll('.payment-method-btn').forEach(btn => {
+                btn.onclick = function() {
+                    document.querySelectorAll('.payment-method-btn').forEach(b => b.classList.remove('active'));
+                    this.classList.add('active');
+                    if(this.dataset.method === 'scanner') {
+                        document.getElementById('cardPaymentForm').classList.add('hidden');
+                        document.getElementById('qrPaymentForm').classList.remove('hidden');
+                    } else {
+                        document.getElementById('cardPaymentForm').classList.remove('hidden');
+                        document.getElementById('qrPaymentForm').classList.add('hidden');
+                    }
+                };
+            });
+
+            // Setup card form validation
+            const cardForm = document.getElementById('cardForm');
+            if (cardForm) {
+                cardForm.onsubmit = function(e) {
+                    e.preventDefault();
+                    processPayment('Card');
+                };
+            }
+        }
+
+        function simulateQRPayment() {
+            processPayment('QR Code');
+        }
+
+        function processPayment(method) {
+            if(cart.length === 0) return;
+            showToast(`Processing ${method} Payment...`, 'info');
+            setTimeout(() => {
+                // Create Order
+                const newOrder = {
+                    id: Date.now(),
+                    date: new Date().toISOString().split('T')[0],
+                    customer: currentUserData.name,
+                    amount: cart.reduce((s,i) => s + i.price*i.qty, 0),
+                    items: cart.length,
+                    status: 'processing'
+                };
+                
+                orders.unshift(newOrder);
+                saveData(DB_KEYS.ORDERS, orders);
+                
+                cart = [];
+                saveData(DB_KEYS.CART, cart);
+                updateCartBadge();
+                
+                showToast('Payment Successful! Your order has been placed.');
+                switchSection('ordersSection');
+            }, 2000);
+        }
+
+        /**
+         * FEEDBACK (Customer Only)
+         */
+        function loadFeedback() {
+            // Populate order dropdown
+            const feedbackOrderSelect = document.getElementById('feedbackOrder');
+            const customerOrders = orders.filter(o => o.customer === currentUserData.name);
+            feedbackOrderSelect.innerHTML = '<option value="">Select Order</option>' +
+                customerOrders.map(order => 
+                    `<option value="${order.id}">Order #${order.id} - $${order.amount.toFixed(2)} - ${order.date}</option>`
+                ).join('');
+            
+            // Setup star rating
+            const stars = document.querySelectorAll('.star');
+            const ratingInput = document.getElementById('feedbackRating');
+            stars.forEach(s => {
+                s.onclick = () => {
+                    const r = s.dataset.rating;
+                    ratingInput.value = r;
+                    stars.forEach(st => {
+                        st.classList.toggle('active', st.dataset.rating <= r);
+                    });
+                };
+            });
+
+            // Load previous feedback
+            const container = document.getElementById('previousFeedback');
+            if(feedbacks.filter(f => f.customer === currentUserData.name).length === 0) {
+                container.innerHTML = '<p>No feedback submitted yet.</p>';
+            } else {
+                container.innerHTML = feedbacks.filter(f => f.customer === currentUserData.name).map(f => `
+                    <div class="feedback-item" style="border:1px solid #ddd; padding:15px; margin-bottom:10px; border-radius:8px;">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+                            <h4 style="margin: 0; flex: 1;">${f.title}</h4>
+                            <span style="color: #666; font-size: 0.9rem;">${f.date}</span>
+                        </div>
+                        <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 0.5rem;">
+                            <div class="rating-display">
+                                ${'⭐'.repeat(f.rating)}${'☆'.repeat(5 - f.rating)}
+                            </div>
+                            <span class="category-badge" style="background: #e3f2fd; color: #1976d2; padding: 0.2rem 0.5rem; border-radius: 12px; font-size: 0.8rem;">
+                                ${f.category.replace('-', ' ')}
+                            </span>
+                        </div>
+                        <p style="margin: 0.5rem 0;">${f.message}</p>
+                        ${f.orderId ? `<p style="color: #666; font-size: 0.9rem; margin: 0;">Order: #${f.orderId}</p>` : ''}
+                    </div>
+                `).join('');
+            }
+
+            // Setup feedback form submission
+            const feedbackForm = document.getElementById('feedbackForm');
+            if (feedbackForm) {
+                feedbackForm.onsubmit = function(e) {
+                    e.preventDefault();
+                    submitFeedback();
+                };
+            }
+        }
+
+        function submitFeedback() {
+            const rating = document.getElementById('feedbackRating').value;
+            if(rating === "0") {
+                showToast('Please select a star rating', 'error');
+                return;
+            }
+            
+            const newFeedback = {
+                id: Date.now(),
+                customer: currentUserData.name,
+                orderId: document.getElementById('feedbackOrder').value || null,
+                rating: parseInt(rating),
+                category: document.getElementById('feedbackCategory').value,
+                title: document.getElementById('feedbackTitle').value,
+                message: document.getElementById('feedbackMessage').value,
+                date: new Date().toLocaleDateString(),
+                allowContact: document.getElementById('allowContact').checked
+            };
+            
+            feedbacks.unshift(newFeedback);
+            saveData(DB_KEYS.FEEDBACK, feedbacks);
+            
+            showToast('Thank you for your feedback!');
+            
+            // Reset form
+            document.getElementById('feedbackForm').reset();
+            document.querySelectorAll('.star').forEach(s => {
+                s.classList.remove('active');
+            });
+            document.getElementById('feedbackRating').value = "0";
+            
+            // Reload feedback
+            loadFeedback();
+        }
+    </script>
+</body>
+</html>

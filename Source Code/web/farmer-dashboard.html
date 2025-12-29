@@ -1,0 +1,869 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Farmer Dashboard - Direct Farm Market</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-gradient: linear-gradient(135deg, #4CAF50 0%, #45a049 100%);
+            --secondary-gradient: linear-gradient(135deg, #FF9800 0%, #FF5722 100%);
+            --success-gradient: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            --warning-gradient: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+            --glass-gradient: linear-gradient(135deg, rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.95));
+            --farm-gradient: linear-gradient(45deg, #4CAF50, #8BC34A, #CDDC39, #FFEB3B, #FFC107, #FF9800);
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: var(--farm-gradient);
+            background-size: 400% 400%;
+            animation: gradientShift 15s ease infinite;
+            color: #2c3e50;
+            line-height: 1.6;
+            min-height: 100vh;
+            position: relative;
+        }
+
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .dashboard-container {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        /* Header */
+        header {
+            background: var(--primary-gradient);
+            color: white;
+            padding: 1rem 2rem;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header-left h1 {
+            font-size: 1.8rem;
+            margin-bottom: 0.2rem;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .user-role {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+        }
+
+        .language-selector select {
+            background: rgba(255, 255, 255, 0.9);
+            border: 2px solid #4CAF50;
+            border-radius: 8px;
+            padding: 0.5rem;
+            color: #2c3e50;
+            font-weight: 500;
+        }
+
+        .btn-logout {
+            background: rgba(231, 76, 60, 0.8);
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        /* Navigation */
+        .top-nav {
+            background: rgba(255, 255, 255, 0.9);
+            padding: 0.5rem 2rem;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .nav-container {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .nav-btn {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.7rem 1.2rem;
+            background: rgba(255, 255, 255, 0.7);
+            border: none;
+            border-radius: 6px;
+            color: #555;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 0.9rem;
+        }
+
+        .nav-btn:hover {
+            background: rgba(255, 255, 255, 0.9);
+            transform: translateY(-2px);
+        }
+
+        .nav-btn.active {
+            background: var(--primary-gradient);
+            color: white;
+        }
+
+        /* Main Content */
+        .dashboard-content {
+            flex: 1;
+            padding: 2rem;
+        }
+
+        .main-content {
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 12px;
+            padding: 2rem;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            backdrop-filter: blur(10px);
+        }
+
+        .content-section {
+            display: block;
+        }
+
+        .content-section.hidden {
+            display: none;
+        }
+
+        .section-header {
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid rgba(76, 175, 80, 0.2);
+        }
+
+        /* Stats Grid */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: rgba(255, 255, 255, 0.9);
+            padding: 1.5rem;
+            border-radius: 12px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            transition: all 0.3s;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .stat-card:nth-child(1) { background: var(--primary-gradient); color: white; }
+        .stat-card:nth-child(2) { background: var(--success-gradient); color: white; }
+        .stat-card:nth-child(3) { background: var(--secondary-gradient); color: white; }
+        .stat-card:nth-child(4) { background: var(--warning-gradient); color: white; }
+
+        .stat-icon { font-size: 2.5rem; margin-bottom: 0.5rem; }
+        .stat-number { font-size: 2.2rem; font-weight: bold; margin-bottom: 0.5rem; }
+        .stat-label { font-size: 0.9rem; opacity: 0.9; }
+
+        /* Products Grid */
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .product-card {
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s;
+        }
+
+        .product-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .transparency-info {
+            background: #e8f5e8;
+            padding: 0.8rem;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            border-left: 4px solid #4CAF50;
+        }
+
+        .btn-primary {
+            padding: 0.75rem 1.5rem;
+            background: var(--primary-gradient);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+        }
+
+        /* Forms */
+        .product-form {
+            max-width: 600px;
+        }
+
+        .form-group {
+            margin-bottom: 1.2rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+        }
+
+        .form-group input, .form-group textarea, .form-group select {
+            width: 100%;
+            padding: 0.75rem;
+            border: 2px solid rgba(76, 175, 80, 0.2);
+            border-radius: 6px;
+            font-size: 1rem;
+            background: rgba(255, 255, 255, 0.9);
+        }
+
+        .form-actions {
+            display: flex;
+            gap: 1rem;
+            justify-content: flex-end;
+            margin-top: 2rem;
+        }
+
+        /* Voice Assistant */
+        .voice-assistant {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            z-index: 1000;
+        }
+
+        .voice-btn {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: var(--primary-gradient);
+            color: white;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s;
+        }
+
+        .voice-btn:hover {
+            transform: scale(1.1);
+        }
+
+        .voice-btn.listening {
+            animation: pulse 1.5s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+    </style>
+</head>
+<body>
+    <div class="dashboard-container">
+        <header>
+            <div class="header-content">
+                <div class="header-left">
+                    <h1 data-translate="welcome">🌱 Farmer Dashboard</h1>
+                    <div class="system-status" data-translate="farm_to_table">Manage your farm products and orders</div>
+                </div>
+                <div class="user-info">
+                    <span id="userFullName">Loading...</span>
+                    <span class="user-role" data-translate="farmer">Farmer</span>
+                    <select class="language-selector" id="languageSelect">
+                        <option value="en">🌐 English</option>
+                        <option value="ta">🌐 Tamil</option>
+                        <option value="hi">🌐 Hindi</option>
+                        <option value="kn">🌐 Kannada</option>
+                        <option value="ml">🌐 Malayalam</option>
+                    </select>
+                    <button id="logoutBtn" class="btn-logout" data-translate="logout">🚪 Logout</button>
+                </div>
+            </div>
+        </header>
+        
+        <nav class="top-nav">
+            <div class="nav-container">
+                <button id="dashboardBtn" class="nav-btn active" data-translate="dashboard">📊 Dashboard</button>
+                <button id="myProductsBtn" class="nav-btn" data-translate="my_products">🌾 My Products</button>
+                <button id="addProductBtn" class="nav-btn" data-translate="add_product">🔼 Add Product</button>
+                <button id="ordersBtn" class="nav-btn" data-translate="my_orders">📦 Orders</button>
+                <button id="profileBtn" class="nav-btn" data-translate="profile">👤 Profile</button>
+            </div>
+        </nav>
+        
+        <div class="dashboard-content">
+            <main class="main-content">
+                <!-- Farmer Dashboard Section -->
+                <section id="dashboardSection" class="content-section">
+                    <div class="section-header">
+                        <h2 data-translate="farmer_dashboard">Farmer Dashboard</h2>
+                        <p data-translate="manage_business">Manage your farm business and track performance</p>
+                    </div>
+                    
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <div class="stat-icon">🌾</div>
+                            <div class="stat-number" id="totalProducts">0</div>
+                            <div class="stat-label" data-translate="total_products">Total Products</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon">📦</div>
+                            <div class="stat-number" id="totalOrders">0</div>
+                            <div class="stat-label" data-translate="total_orders">Total Orders</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon">💰</div>
+                            <div class="stat-number" id="totalRevenue">$0</div>
+                            <div class="stat-label" data-translate="total_revenue">Total Revenue</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon">⭐</div>
+                            <div class="stat-number" id="rating">4.8</div>
+                            <div class="stat-label" data-translate="customer_rating">Customer Rating</div>
+                        </div>
+                    </div>
+                    
+                    <div class="section-header">
+                        <h2 data-translate="recent_orders">Recent Orders</h2>
+                        <p data-translate="latest_orders">Latest orders from customers</p>
+                    </div>
+                    
+                    <div id="recentOrders">
+                        <!-- Orders will be loaded here -->
+                    </div>
+                </section>
+
+                <!-- My Products Section -->
+                <section id="myProductsSection" class="content-section hidden">
+                    <div class="section-header">
+                        <h2 data-translate="my_products">My Products</h2>
+                        <p data-translate="manage_products">Manage your farm products</p>
+                    </div>
+                    
+                    <div id="myProductsGrid" class="products-grid">
+                        <!-- Farmer's products will be loaded here -->
+                    </div>
+                </section>
+
+                <!-- Add Product Section -->
+                <section id="addProductSection" class="content-section hidden">
+                    <div class="section-header">
+                        <h2 data-translate="add_product">Add New Product</h2>
+                        <p data-translate="add_product_desc">List your farm products with transparent pricing</p>
+                    </div>
+                    
+                    <form id="addProductForm" class="product-form">
+                        <div class="form-group">
+                            <label for="productName" data-translate="product_name">Product Name:</label>
+                            <input type="text" id="productName" name="productName" required 
+                                   data-placeholder="product_name_placeholder" placeholder="Enter product name">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="productCategory" data-translate="category">Category:</label>
+                            <select id="productCategory" name="category" required>
+                                <option value="" data-translate="select_category">Select Category</option>
+                                <option value="vegetables">🥬 Vegetables</option>
+                                <option value="fruits">🍎 Fruits</option>
+                                <option value="grains">🌾 Grains</option>
+                                <option value="dairy">🥛 Dairy</option>
+                                <option value="meat">🍖 Meat</option>
+                                <option value="organic">🌿 Organic</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="productDescription" data-translate="description">Description:</label>
+                            <textarea id="productDescription" name="description" rows="3" required 
+                                      data-placeholder="description_placeholder" placeholder="Describe your product"></textarea>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="productPrice" data-translate="price">Selling Price ($):</label>
+                            <input type="number" id="productPrice" name="price" step="0.01" required 
+                                   data-placeholder="price_placeholder" placeholder="0.00">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="productionCost" data-translate="production_cost">Production Cost ($):</label>
+                            <input type="number" id="productionCost" name="productionCost" step="0.01" required 
+                                   data-placeholder="cost_placeholder" placeholder="0.00">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="productQuantity" data-translate="quantity">Quantity:</label>
+                            <input type="number" id="productQuantity" name="quantity" required 
+                                   data-placeholder="quantity_placeholder" placeholder="Enter quantity">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="productUnit" data-translate="unit">Unit:</label>
+                            <select id="productUnit" name="unit" required>
+                                <option value="" data-translate="select_unit">Select Unit</option>
+                                <option value="kg">Kilogram (kg)</option>
+                                <option value="lb">Pound (lb)</option>
+                                <option value="piece">Piece</option>
+                                <option value="bunch">Bunch</option>
+                                <option value="dozen">Dozen</option>
+                            </select>
+                        </div>
+                        
+                        <div class="transparency-info">
+                            <h4 data-translate="transparent_pricing">💰 Transparent Pricing</h4>
+                            <div>
+                                <span data-translate="production_cost">Production Cost:</span>
+                                <span id="displayCost">$0.00</span>
+                            </div>
+                            <div>
+                                <span data-translate="selling_price">Selling Price:</span>
+                                <span id="displayPrice">$0.00</span>
+                            </div>
+                            <div>
+                                <span data-translate="profit_margin">Your Profit Margin:</span>
+                                <span id="profitMargin" class="profit-margin">$0.00</span>
+                            </div>
+                        </div>
+                        
+                        <div class="form-actions">
+                            <button type="button" class="btn-secondary" onclick="switchSection('myProductsSection')" 
+                                    data-translate="cancel">Cancel</button>
+                            <button type="submit" class="btn-primary" data-translate="add_product">
+                                🌾 Add Product
+                            </button>
+                        </div>
+                    </form>
+                </section>
+
+                <!-- Orders Section -->
+                <section id="ordersSection" class="content-section hidden">
+                    <div class="section-header">
+                        <h2 data-translate="customer_orders">Customer Orders</h2>
+                        <p data-translate="manage_orders">Manage and fulfill customer orders</p>
+                    </div>
+                    
+                    <div id="ordersList">
+                        <!-- Orders will be loaded here -->
+                    </div>
+                </section>
+
+                <!-- Profile Section -->
+                <section id="profileSection" class="content-section hidden">
+                    <div class="section-header">
+                        <h2 data-translate="profile">Farmer Profile</h2>
+                        <p data-translate="manage_profile">Manage your account information</p>
+                    </div>
+                    
+                    <div class="profile-info">
+                        <div class="form-group">
+                            <label data-translate="full_name">Full Name:</label>
+                            <input type="text" id="profileName" readonly>
+                        </div>
+                        <div class="form-group">
+                            <label data-translate="phone">Phone:</label>
+                            <input type="tel" id="profilePhone">
+                        </div>
+                        <div class="form-group">
+                            <label data-translate="address">Address:</label>
+                            <textarea id="profileAddress" rows="3"></textarea>
+                        </div>
+                        <button class="btn-primary" data-translate="update_profile">Update Profile</button>
+                    </div>
+                </section>
+            </main>
+        </div>
+    </div>
+
+    <!-- Voice Assistant -->
+    <div class="voice-assistant">
+        <button class="voice-btn" id="voiceAssistantBtn" title="Voice Assistant">🎤</button>
+    </div>
+
+    <script>
+        let currentLanguage = 'en';
+        let translations = {};
+        let userId = null;
+        let userType = 'farmer';
+        let userFullName = '';
+
+        // Initialize dashboard
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeUser();
+            loadTranslations('en');
+            setupEventListeners();
+            loadFarmerData();
+        });
+
+        function initializeUser() {
+            const urlParams = new URLSearchParams(window.location.search);
+            userId = urlParams.get('userId');
+            userType = urlParams.get('userType') || 'farmer';
+            userFullName = urlParams.get('fullName') || 'Farmer';
+            currentLanguage = urlParams.get('language') || 'en';
+            
+            document.getElementById('userFullName').textContent = `Welcome, ${userFullName}!`;
+            document.getElementById('languageSelect').value = currentLanguage;
+        }
+
+        async function loadTranslations(language) {
+            try {
+                const response = await fetch('/api/language', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                    },
+                    body: `language=${language}`
+                });
+                
+                const data = await response.json();
+                if (data.success) {
+                    translations = data.translations;
+                    currentLanguage = language;
+                    applyTranslations();
+                }
+            } catch (error) {
+                console.error('Error loading translations:', error);
+            }
+        }
+
+        function applyTranslations() {
+            document.querySelectorAll('[data-translate]').forEach(element => {
+                const key = element.getAttribute('data-translate');
+                if (translations[key]) {
+                    element.textContent = translations[key];
+                }
+            });
+
+            document.querySelectorAll('[data-placeholder]').forEach(input => {
+                const key = input.getAttribute('data-placeholder');
+                if (translations[key]) {
+                    input.placeholder = translations[key];
+                }
+            });
+        }
+
+        function setupEventListeners() {
+            // Language selector
+            document.getElementById('languageSelect').addEventListener('change', function() {
+                loadTranslations(this.value);
+            });
+
+            // Navigation
+            document.querySelectorAll('.nav-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const targetSection = this.id.replace('Btn', 'Section');
+                    switchSection(targetSection);
+                    
+                    document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+                    this.classList.add('active');
+                });
+            });
+
+            // Logout
+            document.getElementById('logoutBtn').addEventListener('click', function() {
+                if (confirm('Are you sure you want to logout?')) {
+                    window.location.href = 'index.html';
+                }
+            });
+
+            // Product form
+            document.getElementById('addProductForm').addEventListener('submit', async function(e) {
+                e.preventDefault();
+                await addNewProduct();
+            });
+
+            // Price calculations
+            document.getElementById('productPrice').addEventListener('input', updateProfitMargin);
+            document.getElementById('productionCost').addEventListener('input', updateProfitMargin);
+
+            // Voice assistant
+            document.getElementById('voiceAssistantBtn').addEventListener('click', function() {
+                activateVoiceAssistant();
+            });
+        }
+
+        function switchSection(sectionId) {
+            document.querySelectorAll('.content-section').forEach(section => {
+                section.classList.add('hidden');
+            });
+            document.getElementById(sectionId).classList.remove('hidden');
+            
+            // Load section-specific data
+            if (sectionId === 'dashboardSection') {
+                loadFarmerStats();
+            } else if (sectionId === 'myProductsSection') {
+                loadMyProducts();
+            } else if (sectionId === 'ordersSection') {
+                loadFarmerOrders();
+            }
+        }
+
+        async function loadFarmerData() {
+            await loadFarmerStats();
+            await loadMyProducts();
+            await loadFarmerOrders();
+        }
+
+        async function loadFarmerStats() {
+            try {
+                const response = await fetch(`/api/stats?userId=${userId}&userType=${userType}`);
+                const data = await response.json();
+                
+                if (data.success) {
+                    document.getElementById('totalProducts').textContent = data.stats.totalProducts;
+                    document.getElementById('totalOrders').textContent = data.stats.totalOrders;
+                    document.getElementById('totalRevenue').textContent = `$${data.stats.totalRevenue.toFixed(2)}`;
+                }
+            } catch (error) {
+                console.error('Error loading stats:', error);
+            }
+        }
+
+        async function loadMyProducts() {
+            try {
+                const response = await fetch('/api/products');
+                const data = await response.json();
+                
+                if (data.success) {
+                    const myProducts = data.products.filter(product => product.farmerId == userId);
+                    displayMyProducts(myProducts);
+                }
+            } catch (error) {
+                console.error('Error loading products:', error);
+            }
+        }
+
+        function displayMyProducts(products) {
+            const container = document.getElementById('myProductsGrid');
+            
+            if (products.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <p data-translate="no_products">No products found. Add your first product!</p>
+                        <button class="btn-primary" onclick="switchSection('addProductSection')" 
+                                data-translate="add_first_product">Add Your First Product</button>
+                    </div>
+                `;
+                applyTranslations();
+                return;
+            }
+            
+            container.innerHTML = products.map(product => `
+                <div class="product-card">
+                    <div class="product-header">
+                        <div class="product-name">${product.name}</div>
+                        <div class="product-price">$${product.price}/${product.unit}</div>
+                    </div>
+                    <div class="product-category">${getCategoryIcon(product.category)} ${formatCategory(product.category)}</div>
+                    <p class="product-description">${product.description}</p>
+                    <div class="product-meta">
+                        <span class="product-quantity">📦 ${product.quantity} ${product.unit} available</span>
+                    </div>
+                    <div class="transparency-info">
+                        <div>
+                            <span data-translate="production_cost">Production Cost:</span>
+                            <span>$${product.productionCost}/${product.unit}</span>
+                        </div>
+                        <div>
+                            <span data-translate="profit_margin">Profit Margin:</span>
+                            <span class="profit-margin">$${product.profitMargin}/${product.unit}</span>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+            
+            applyTranslations();
+        }
+
+        async function loadFarmerOrders() {
+            try {
+                const response = await fetch(`/api/orders?userId=${userId}&userType=${userType}`);
+                const data = await response.json();
+                
+                if (data.success) {
+                    displayFarmerOrders(data.orders);
+                }
+            } catch (error) {
+                console.error('Error loading orders:', error);
+            }
+        }
+
+        function displayFarmerOrders(orders) {
+            const container = document.getElementById('ordersList');
+            
+            if (orders.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <p data-translate="no_orders">No orders yet</p>
+                    </div>
+                `;
+                applyTranslations();
+                return;
+            }
+            
+            container.innerHTML = orders.map(order => `
+                <div class="order-card">
+                    <div class="order-header">
+                        <div class="order-id">Order #${order.id}</div>
+                        <div class="order-status status-${order.status}">${order.status.toUpperCase()}</div>
+                    </div>
+                    <div class="order-details">
+                        <div><strong data-translate="product">Product:</strong> ${order.productName}</div>
+                        <div><strong data-translate="quantity">Quantity:</strong> ${order.quantity}</div>
+                        <div><strong data-translate="customer">Customer:</strong> ${order.consumerName}</div>
+                        <div><strong data-translate="total">Total:</strong> $${order.totalPrice}</div>
+                        <div><strong data-translate="date">Date:</strong> ${order.orderDate}</div>
+                    </div>
+                </div>
+            `).join('');
+            
+            applyTranslations();
+        }
+
+        async function addNewProduct() {
+            const form = document.getElementById('addProductForm');
+            const formData = new FormData(form);
+            
+            const productData = {
+                farmerId: userId,
+                name: formData.get('productName'),
+                category: formData.get('category'),
+                description: formData.get('description'),
+                price: formData.get('price'),
+                quantity: formData.get('quantity'),
+                unit: formData.get('unit'),
+                productionCost: formData.get('productionCost'),
+                imagePath: ''
+            };
+            
+            try {
+                const response = await fetch('/api/products', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                    },
+                    body: new URLSearchParams(productData)
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    alert('Product added successfully!');
+                    form.reset();
+                    updateProfitMargin();
+                    switchSection('myProductsSection');
+                    loadMyProducts();
+                    loadFarmerStats();
+                } else {
+                    alert('Failed to add product: ' + data.message);
+                }
+            } catch (error) {
+                alert('Error adding product. Please try again.');
+            }
+        }
+
+        function updateProfitMargin() {
+            const price = parseFloat(document.getElementById('productPrice').value) || 0;
+            const cost = parseFloat(document.getElementById('productionCost').value) || 0;
+            const profit = price - cost;
+            
+            document.getElementById('displayPrice').textContent = `$${price.toFixed(2)}`;
+            document.getElementById('displayCost').textContent = `$${cost.toFixed(2)}`;
+            document.getElementById('profitMargin').textContent = `$${profit.toFixed(2)}`;
+            
+            const profitElement = document.getElementById('profitMargin');
+            if (profit < 0) {
+                profitElement.style.color = '#e74c3c';
+            } else if (profit === 0) {
+                profitElement.style.color = '#f39c12';
+            } else {
+                profitElement.style.color = '#27ae60';
+            }
+        }
+
+        function activateVoiceAssistant() {
+            const voiceBtn = document.getElementById('voiceAssistantBtn');
+            voiceBtn.classList.add('listening');
+            
+            // Simulate voice command processing
+            setTimeout(async () => {
+                voiceBtn.classList.remove('listening');
+                
+                // Send voice command to backend
+                try {
+                    const response = await fetch('/api/voice', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/x-www-form-urlencoded',
+                        },
+                        body: `command=show products&language=${currentLanguage}`
+                    });
+                    
+                    const data = await response.json();
+                    if (data.success) {
+                        alert(`Voice Assistant: ${data.response}`);
+                        switchSection('myProductsSection');
+                    }
+                } catch (error) {
+                    alert('Voice command failed. Please try again.');
+                }
+            }, 2000);
+        }
+
+        function getCategoryIcon(category) {
+            const icons = {
+                'vegetables': '🥬',
+                'fruits': '🍎',
+                'grains': '🌾',
+                'dairy': '🥛',
+                'meat': '🍖',
+                'organic': '🌿'
+            };
+            return icons[category] || '📦';
+        }
+
+        function formatCategory(category) {
+            return category.charAt(0).toUpperCase() + category.slice(1);
+        }
+    </script>
+</body>
+</html>
